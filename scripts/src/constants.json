@@ -1,0 +1,46 @@
+{
+  "globalRole" : "global",
+  "roles": {
+    "user": "user",
+    "admin": "administrator"
+  },
+  "joinStates": {
+    "pending": "pending",
+    "approved": "approved",
+    "rejected": "rejected"
+  },
+  "organisationFields": {
+    "description": "description",
+    "email": "email",
+    "modal_link_url": "modal_link_url",
+    "modal_link_text": "modal_link_text",
+    "resolution_redirect": "resolution_redirect",
+    "id" : "id",
+    "website": "website",
+    "address": "address",
+    "twitter": "twitter",
+    "state": "state",
+    "phone": "phone",
+    "name": "name",
+    "logo": "logo",
+    "joinState": "join_state",
+    "role": "role"
+  },
+  "userFields": {
+    "firstName": "first_name",
+    "lastName": "last_name",
+    "verified": "verified",
+    "organisations": "organisations",
+    "id": "id",
+    "email": "email"
+  },
+  "serviceFields": {
+    "organisationId": "organisation_id",
+    "id": "id",
+    "name": "name",
+    "createdBy": "created_by",
+    "location": "location",
+    "serviceType": "service_type",
+    "permissions": "permissions"
+  }
+}

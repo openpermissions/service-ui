@@ -1,0 +1,109 @@
+.header {
+    background-color: $color-white;
+    overflow: hidden;
+
+    .col {
+        height: 135px;
+    }
+}
+
+    .header__logo {
+        float: left;
+        margin: 30px 0 0;
+
+        img {
+            max-width: 100%;
+        }
+    }
+
+    .header__actions {
+        background-color: $brand-primary;
+        position: relative;
+
+        &:after {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 100%;
+            height: 100%;
+            width: 1000%;
+            background-color: $brand-primary;
+        }
+
+        &, a:link, a:visited, a:hover, a:active {
+            color: $color-white;
+            text-decoration: none;
+        }
+        a {
+            padding: 5px 0;
+        }
+    }
+        .header__title {
+            font-size: 25px;
+            font-weight: 700;
+            float: left;
+            margin: 25px 0 25px 5px;
+            
+            small {
+                color: $color-white;
+            }
+        }
+        .header__menu {
+            font-size: 16px;
+            line-height: 28px;
+        }
+        .header__menu--pages {
+            float: left;
+            clear: left;
+            margin-left: 5px;
+
+            a {
+                margin-right: 20px;
+            }
+        }
+        .header__menu--user {
+            position: absolute;
+            top: 24px;
+            right: $grid-gutter-width / 2;
+
+            a {
+                margin-left: 20px;
+            }
+        }
+
+
+        .header__menu__item--selected,
+        .header__menu a:hover,
+        .header__menu a:active,
+        .header__menu a:focus {
+            border-top: 4px solid $color-white;
+            outline: 0;
+        }
+
+
+.sub-header {
+    background-color: $color-lightgrey;
+
+    .header__menu {
+        margin-bottom: 30px;
+    }
+
+    .header__menu__item {
+        text-decoration: none;
+        color: $color-black;
+    }
+
+    .header__menu__item--selected,
+    .header__menu a:hover,
+    .header__menu a:active,
+    .header__menu a:focus {
+        border-top-color: $color-black;
+    }
+}
+
+.sub-heading {
+    font-size: 30px;
+    margin-bottom: 40px;
+}
+

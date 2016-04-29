@@ -1,0 +1,61 @@
+{
+    "requests": {
+        "pending": {
+            "title": "Pending Requests",
+            "none": "None pending",
+            "org": {
+                "join": "You have requested to join the following organisations:",
+                "create": "You have requested to create the following organisations:",
+                "headers": ["Organisation", "Action"]
+            },
+            "srv": {
+                "create": "You have requested to create the following services:",
+                "headers": ["Service", "Action"]
+            },
+            "rep": {
+                "create": "You have requested to create the following repositories:",
+                "headers": ["Repository", "Action"]
+            }
+        },
+        "titles": {
+            "createOrg": "Create Organisation Requests",
+            "createSrv": "Create Service Requests",
+            "createRep": "Create Repository Requests",
+            "join": "Join Organisation Requests"
+        },
+        "actions": {
+            "approve": "Approve",
+            "reject": "Reject",
+            "details": "Details",
+            "remove": "Remove this request",
+            "createOrg": "Create a New Organisation",
+            "joinOrg": "Join an Existing Organisation",
+            "chooseOrg": "Choose an Organisation",
+            "selectOrg": "Select an Organisation",
+            "join": "Join",
+            "updateOrg": "Update Organisation",
+            "editOrg": "Edit",
+            "switch": "Switch",
+            "deleteOrg": "Delete",
+            "changePass": "Change Password",
+            "confirmPass": "Confirm new password"
+        }
+    },
+    "labels": {
+        "ok": "OK",
+        "cancel": "Cancel",
+        "selectOpt": "Select an option",
+        "existingOrg": "Existing Organisations",
+        "createSrvForm": "Create service form",
+        "selectOrg": "Select the organisation you wish to join",
+        "myReqs": "My Requests Page",
+        "orgProfile": "Organisation Profile",
+        "currentPass": "Current password",
+        "newPass": "New password",
+        "dontMatch": "Passwords don't match",
+        "passChanged": "Password changed"
+    },
+    "text": {
+        "reviewReq": "Your request will need to be reviewed by an Administrator before you have access. You can check on the state of your request via the 'Requests' tab."
+    }
+}

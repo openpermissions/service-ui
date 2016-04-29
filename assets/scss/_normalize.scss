@@ -1,0 +1,120 @@
+html{
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin: 0 0 100px;
+    border-top: 10px solid #1b2f2c;
+}
+
+h1 {
+    margin: 30px 0 20px;
+}
+h2 {
+    margin: 30px 0 20px;
+}
+
+hr {
+    margin: 60px 0;
+    border-bottom: 5px solid $hr-border;
+}
+
+label {
+    display: block;
+}
+
+.label--big {
+    font-size: 23px;
+}
+
+.cb {
+    clear: both;
+}
+.form-group {
+    margin-bottom: 30px;
+}
+.form-control {
+    border-width: 2px;
+}
+
+.form-control {
+    font-size: 18px;
+}
+
+.btn {
+    position: relative;
+    text-transform: uppercase;
+    padding: 6px 20px;
+    font-weight: 700;
+    letter-spacing: 2px;
+
+    &:after {
+        content: "";
+        display: block;
+        border-bottom: 4px solid $color-white;
+        margin-top: 3px;
+    }
+
+    .form-group & {
+        margin-right: $grid-gutter-width;
+    }
+
+    .form-group.text-right & {
+        margin-right: 0;
+        margin-left: $grid-gutter-width;
+    }
+}
+
+.help-block-danger {
+    color: $state-danger-text;
+}
+
+.table {
+    font-size: 15px;
+    margin-bottom: 30px;
+
+    > thead > tr > th {
+        border-bottom: 5px solid $table-border-color;
+    }
+
+    > thead,
+    > tbody,
+    > tfoot {
+        > tr {
+            > th,
+            > td {
+                border-top: 5px solid $table-border-color;
+            }
+        }
+    }
+
+    th,
+    td {
+        &:last-child {
+            text-align: right;
+
+            a {
+                margin-left: 15px;
+
+                .permissions & {
+                    line-height: 38px;
+                }
+            }
+        }
+    }
+}
+
+.container, .react-modal {
+    .container {
+        padding-left: 0;
+        padding-right: 0;
+        width: 100%;
+    }
+}
+
+
+.m-t-60 { margin-top: 60px !important; }
+.m-t-30 { margin-top: 30px !important; }
+.m-t--30{ margin-top:-30px !important; }
+.m-b-0  { margin-bottom: 0 !important; }

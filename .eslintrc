@@ -1,0 +1,36 @@
+{
+  "extends": "eslint:recommended",
+  "plugins": [
+    "react"
+  ],
+  "env": {
+    "node": true,
+    "es6": true,
+    "browser": true,
+  },
+  "ecmaFeatures": {
+    "modules": true,
+    "jsx": true,
+    "destructuring": true,
+    "blockBindings": true,
+    "forOf": true
+  },
+  "rules": {
+    "prefer-const": 1,
+    "indent": [2, 2, {
+      "VariableDeclarator": {
+        "var": 2,
+        "let": 2,
+        "const": 3
+      }
+    }],
+    "no-undef": 0,
+    "no-console": 0,
+    "no-use-before-define": 0,
+    "camelcase": [1, {
+      "properties": "always"
+    }],
+    "quotes": [2, "single", "avoid-escape"],
+    "semi": [2, "always"]
+  }
+}

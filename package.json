@@ -1,0 +1,66 @@
+{
+    "name": "opp-ui",
+    "description": "User interface Open Permissions Platform services",
+    "version": "3.0.0",
+    "repository": "https://github.com/openpermissions/service-ui",
+    "license": "Apache-2.0",
+    "dependencies": {
+        "baconjs": "~0.7.41",
+        "chub": "git+ssh://git@github.com:openpermissions/javascript-client.git#0.3.0",
+        "classnames": "^2.1.5",
+        "eslint": "^1.10.3",
+        "immutable": "~3.4.1",
+        "jsonld": "^0.4.8",
+        "lodash": "~3.10.1",
+        "react": "~0.14.0",
+        "react-addons-css-transition-group": "~0.14.0",
+        "react-addons-linked-state-mixin": "~0.14.0",
+        "react-addons-pure-render-mixin": "~0.14.0",
+        "react-dom": "~0.14.0",
+        "react-aria-menubutton": "4.1.1",
+        "react-simpletabs": "^0.7.0",
+        "string-format": "0.5.0",
+        "uuid": "^1.4.2",
+        "react-rating": "^0.2.2"
+    },
+    "devDependencies": {
+        "async": "^0.9.0",
+        "aws-sdk": "^2.1.14",
+        "babel": "^5.8.23",
+        "babelify": "^6.3.0",
+        "bootstrap-sass": "^3.3.6",
+        "browserify": "^11.2.0",
+        "browserify-versionify": "^1.0.6",
+        "cucumber": "^0.4.7",
+        "jshint": "^2.5.11",
+        "mime": "latest",
+        "mocha": "^2.1.0",
+        "mocha-bamboo-reporter": "latest",
+        "mock-local-storage": "^1.0.2",
+        "node-sass": "^3.4.2",
+        "selenium-standalone": "^3.1.2",
+        "rewire": "^2.5.1",
+        "should": "^8.3.1",
+        "sinon": "^1.12.2",
+        "sinon-as-promised": "^2.0.3",
+        "uglify-js": "^2.4.24",
+        "watchify": "^3.4.0",
+        "webdriverio": "^2.4.3"
+    },
+    "scripts": {
+        "lint": "jshint scripts/src/**.js",
+        "test": "mocha -r mock-local-storage --compilers js:babel/register test/**/*.js test/*.js",
+        "build": "NODE_ENV=production browserify scripts/src/main.js | uglifyjs -m | (cat scripts/src/header.txt && cat) > scripts/bundle.js",
+        "build-dev": "browserify scripts/src/main.js -o scripts/bundle.js --debug",
+        "build-dev:watch": "watchify scripts/src/main.js -v -o scripts/bundle.js --debug",
+        "build-dev-css": "node-sass -r --output-style compressed assets/scss/global.scss assets/css/global.css",
+        "build-dev-css:watch": "node-sass -rw --output-style compressed assets/scss/global.scss assets/css/global.css",
+        "deploy": "npm run build-dev-css && NODE_ENV=production browserify scripts/src/main.js | uglifyjs -m | (cat scripts/src/header.txt && cat) | node deploy"
+    },
+    "browserify": {
+        "transform": [
+            "babelify",
+            "browserify-versionify"
+        ]
+    }
+}

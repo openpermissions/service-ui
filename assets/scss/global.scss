@@ -1,0 +1,10 @@
+@import 'variables';
+@import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap';
+@import 'normalize';
+
+@import 'components/header';
+@import 'components/footer';
+@import 'components/modal';
+@import 'components/body';
+
+@import 'pages/account';
