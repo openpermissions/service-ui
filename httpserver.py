@@ -1,21 +1,14 @@
 # -*- coding: utf-8 -*-
-# Copyright 2016 Open Permissions Platform Coalition
 
-# Licensed under the Apache License, Version 2.0 (the "License"); you may not
-# use this file except in compliance with the License. You may obtain a copy
-# of the License at http://www.apache.org/licenses/LICENSE-2.0
+# Based On:
+# https://gist.github.com/chrisbolin/2e90bc492270802d00a6#file-serve-py
 
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# Wrapper around python's SimpleHTTPServer
+# If url path does not match a file on disk, redirect
+# to index.html so that React can handle the routing.
 
-# See the License for the specific language governing permissions and
-# limitations under the License.
-"""
- Wrapper around python's SimpleHTTPServer
- If url path does not match a file on disk, redirect
- to index.html so that React can handle the routing.
-"""
+# Useful for development / testing purposes.
+
 
 import SimpleHTTPServer
 import SocketServer
@@ -36,7 +29,7 @@ class Handler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             # File exists, serve it up
             SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET(self)
         else:
-            # send index.hmtl
+            # send index.html
             self.send_response(200)
             self.send_header('Content-Type', 'text/html')
             self.end_headers()
