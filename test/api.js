@@ -137,11 +137,11 @@ var mockApi = {
       "organisations": {
         "global": {
           "role": "user",
-          "join_state": "approved"
+          "state": "approved"
         },
         "org_id": {
           "role": "user",
-          "join_state": "pending"
+          "state": "pending"
         }
       }
     }}}
@@ -153,7 +153,7 @@ var mockApi = {
       "organisations": {
         "global": {
           "role": "user",
-          "join_state": "approved"
+          "state": "approved"
         }
       }
     }}}

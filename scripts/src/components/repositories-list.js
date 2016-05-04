@@ -74,7 +74,7 @@ const Repositories = React.createClass({
                           <td>{repository.service.name}</td>
                           <td>{this.props.orgIndexById[repository.service.organisation_id].name}</td>
                           <td>{_.capitalize(repository.state)}</td>
-                          <td>{(isOrgAdmin || (userId == repository.created_by && repository.state === consts.joinStates.approved)) &&
+                          <td>{(isOrgAdmin || (userId == repository.created_by && repository.state === consts.states.approved)) &&
                               <div><a href='#' onClick={this._edit(repository.id)}>Edit</a></div>}</td>
                          </tr>
             )}

@@ -91,10 +91,10 @@ const SwitchOrganisation = React.createClass({
   _getUserOrganisations: function () {
     if (this.props.user.getIn(['organisations', consts.globalRole, 'role']) === 'administrator') {
       return this.props.organisations.filter(function(org) {
-        return org.get('state') === consts.joinStates.approved;
+        return org.get('state') === consts.states.approved;
       });
     }
-    const orgIds = util.getUserOrgsByState(this.props.user.toJS(), consts.joinStates.approved);
+    const orgIds = util.getUserOrgsByState(this.props.user.toJS(), consts.states.approved);
     return this.props.organisations.filter(function(org) {
       return orgIds.indexOf(org.get('id')) !== -1;
     });

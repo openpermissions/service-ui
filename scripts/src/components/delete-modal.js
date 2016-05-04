@@ -30,15 +30,15 @@ const DeleteModal = React.createClass({
     return (
       <Modal onClose={this.props.onClose} key='delete-modal'>
         <div id='crhu_form_section'>
-          <h1>Delete {heading}</h1>
-          <p className={'sub-heading'}>Are you sure you want to delete this {this.props.type}? This action cannot be undone.</p>
+          <h1>Deactivate {heading}</h1>
+          <p className={'sub-heading'}>Are you sure you want to deactivate this {this.props.type}?</p>
 
           <div className={'form-group'}>
             <button
               className={'btn btn-danger'}
               onClick={this.props.onDelete}
               autoFocus={true}>
-                Delete
+                Deactivate
             </button>
             <button className={'btn btn-default'}
               id='crhu_button_cancel'

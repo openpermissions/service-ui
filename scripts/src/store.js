@@ -424,7 +424,7 @@ function offerSaved(prev, offer) {
  *     organisations: {
  *       org_id: {
  *         role: str,
- *         'join_state': str
+ *         'state': str
  *       }
  *     },
  *     verified: bool
