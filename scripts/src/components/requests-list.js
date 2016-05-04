@@ -45,7 +45,7 @@ const RequestRow = React.createClass({
     actions.updateJoinOrganisation.push({
       'organisationId': this.props.viewOrg.get('id'),
       'userId': this.props.viewUser.get('id'),
-      'joinState': consts.joinStates.approved
+      'state': consts.states.approved
     });
   },
 
@@ -53,7 +53,7 @@ const RequestRow = React.createClass({
     actions.updateJoinOrganisation.push({
       'organisationId': this.props.viewOrg.get('id'),
       'userId': this.props.viewUser.get('id'),
-      'joinState': consts.joinStates.rejected
+      'state': consts.states.rejected
     });
   },
 
@@ -98,7 +98,7 @@ const RequestsList = React.createClass({
           user => {
             return(
               user.get('organisations').get(orgId)!==undefined &&
-              user.get('organisations').get(orgId).get('join_state')===consts.joinStates.pending);
+              user.get('organisations').get(orgId).get('state')===consts.states.pending);
           }
         )
       );
@@ -108,7 +108,7 @@ const RequestsList = React.createClass({
           user=>{
             const userOrgs = user.get('organisations').toJS();
             for (const orgId in userOrgs) {
-              if (userOrgs[orgId].join_state===consts.joinStates.pending) {
+              if (userOrgs[orgId].state===consts.states.pending) {
                 return true;
               }
             }
@@ -148,7 +148,7 @@ const RequestsList = React.createClass({
           _.map(Object.keys(user.get('organisations').toJS()), orgId => {
             const orgInfo = user.get('organisations').toJS()[orgId];
             const viewOrg = this.getOrgById(orgId);
-            if (viewOrg && orgInfo.join_state===consts.joinStates.pending) {
+            if (viewOrg && orgInfo.state===consts.states.pending) {
               rows.push(
                 <RequestRow
                   key={user.get('id')+' '+viewOrg.get('id')}

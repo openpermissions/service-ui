@@ -85,7 +85,7 @@ const UsersSection = React.createClass({
   getOrganisationsForIds: function(orgIds) {
     if (orgIds.indexOf(consts.globalRole) != -1) {
       return this.props.organisations.filter(function(org) {
-        return org.get('state')===consts.joinStates.approved;
+        return org.get('state')===consts.states.approved;
       });
     }
     return this.props.organisations.filter(function(org) {
@@ -100,7 +100,7 @@ const UsersSection = React.createClass({
     return this.props.users.filter(function(user) {
       const orgs = user.get('organisations').toJS();
       const userOrgs = _.filter(Object.keys(orgs),
-          org => orgs[org]['join_state'] == 'approved');
+          org => orgs[org]['state'] == consts.states.approved);
       return _.intersection(orgIds, userOrgs).length != 0;
     });
   },

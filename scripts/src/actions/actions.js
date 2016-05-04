@@ -194,18 +194,18 @@ function Actions(accountsClient, repositoryClient, authenticationClient) {
 
   //this.updateUserRole -> updated user object
   const updateUserRoles = this.updateUserRole
-                             .map(valuesFor(['userId', 'roleId', 'organisationId']))
+                             .map(valuesFor(['userId', 'role', 'organisationId']))
                              .flatMapConcat(args => accountsRequest.updateUserRole(...args))
                              .map('.body.data');
 
   // this.updateJoinOrganisation -> updated user object
-  const updateUserJoinState = this.updateJoinOrganisation
-                                .map(valuesFor(['organisationId', 'userId', 'joinState']))
+  const updateUserOrgState = this.updateJoinOrganisation
+                                .map(valuesFor(['organisationId', 'userId', 'state']))
                                 .flatMapLatest(args => accountsRequest.updateJoinOrganisation(...args))
                                 .map('.body.data');
 
   this.updatedUser = Bacon.mergeAll(user, updateUserJoinOrg, updateUserLeaveOrg,
-                                    updateUserRoles, updateUserJoinState);
+                                    updateUserRoles, updateUserOrgState);
 
   // changePassword -> notification that password changed
   this.passwordChanged = this.changePassword

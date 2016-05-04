@@ -4,7 +4,7 @@
     "user": "user",
     "admin": "administrator"
   },
-  "joinStates": {
+  "states": {
     "pending": "pending",
     "approved": "approved",
     "rejected": "rejected"
@@ -23,7 +23,6 @@
     "phone": "phone",
     "name": "name",
     "logo": "logo",
-    "joinState": "join_state",
     "role": "role"
   },
   "userFields": {

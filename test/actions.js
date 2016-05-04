@@ -288,7 +288,7 @@ describe('actions', function () {
       actions.updateUserRole.push({
         userId: 'user1',
         organisationId: 'org1',
-        roleId: 'role1'
+        role: 'role1'
       });
     });
 
@@ -337,7 +337,7 @@ describe('actions', function () {
       actions.updateUserRole.push({
         userId: 'user1',
         organisationId: null,
-        roleId: 'role1'
+        role: 'role1'
       });
     });
 
@@ -386,7 +386,7 @@ describe('actions', function () {
       actions.updateJoinOrganisation.push({
         userId: 'user1',
         organisationId: 'org1',
-        joinState: 'approved'
+        state: 'approved'
       });
     });
 
@@ -663,11 +663,11 @@ describe('actions', function () {
         "organisations": {
           "global": {
             "role": "user",
-            "join_state": "approved"
+            "state": "approved"
           },
           "org_id": {
             "role": "user",
-            "join_state": "pending"
+            "state": "pending"
           }
         }
       });
@@ -717,7 +717,7 @@ describe('actions', function () {
         "organisations": {
           "global": {
             "role": "user",
-            "join_state": "approved"
+            "state": "approved"
           }
         }
       });

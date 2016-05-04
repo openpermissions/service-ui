@@ -83,7 +83,7 @@ const RepositoriesSection = React.createClass({
           editRepository = repositories.get(this.state.editRepository);
 
     const repositoryServices = this.props.services.filter(service =>
-      service.get('service_type') == 'repository' && service.get('state') == consts.joinStates.approved);
+      service.get('service_type') == 'repository' && service.get('state') == consts.states.approved);
 
     if (!this.state.editRepository) {
       const orgIndexById = _.indexBy(this.props.organisations.toJS(), 'id');

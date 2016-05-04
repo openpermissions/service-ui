@@ -60,7 +60,7 @@ const Users = React.createClass({
   },
 
   _userRow: function(orgArray, user) {
-    const orgs = _.filter(Object.keys(user.organisations), value => user.organisations[value]['join_state'] == 'approved');
+    const orgs = _.filter(Object.keys(user.organisations), value => user.organisations[value]['state'] == 'approved');
     const userName = user.first_name + ' ' + user.last_name;
     if (orgs.indexOf(this.props.filterOrg) == -1 && this.props.filterOrg != 'all') {
       return;

@@ -49,7 +49,7 @@ const UserForm = React.createClass({
     const initialState = {};
     const organisations = this.props.editUser.organisations;
     for (const org in organisations) {
-      if (organisations[org]['join_state'] == 'approved') {
+      if (organisations[org]['state'] == consts.states.approved) {
         initialState[org] = this.props.editUser.organisations[org]['role'];
       }
     }
@@ -82,7 +82,7 @@ const UserForm = React.createClass({
         this.state.changes++;
         const role = {
           userId: this.props.editUser.id,
-          roleId: updatedRoles[org],
+          role: updatedRoles[org],
           organisationId: org == consts.globalRole ? null : org
         };
         actions.updateUserRole.push(role);

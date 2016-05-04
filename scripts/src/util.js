@@ -83,13 +83,13 @@ function hasRole(user, role, org) {
       return false;
     }
     return (orgs[org][orgFields.role] === role &&
-      orgs[org][orgFields.joinState] === consts.joinStates.approved) ||
+      orgs[org][orgFields.state] === consts.states.approved) ||
       (orgs[consts.globalRole] && orgs[consts.globalRole][orgFields.role] === role);
   }
 
   for (var key in orgs) {
     if (orgs[key][orgFields.role] === role &&
-        orgs[key][orgFields.joinState] === consts.joinStates.approved) {
+        orgs[key][orgFields.state] === consts.states.approved) {
       return true;
     }
   }
@@ -106,19 +106,19 @@ function getOrganisationIdsByRole(user, role) {
   const organisations = user.organisations;
   return _.filter(Object.keys(organisations),
       value => organisations[value]['role'] === role &&
-      organisations[value][orgFields.joinState] === consts.joinStates.approved);
+      organisations[value][orgFields.state] === consts.states.approved);
 }
 
 /**
-* Returns array of organisations that a user has specified join_state for
+* Returns array of organisations that a user has specified state for
 * @param user
-* @param join_state
+* @param state
 * @returns array of organisation Ids
 */
-function getUserOrgsByState(user, joinState) {
+function getUserOrgsByState(user, state) {
   const organisations = user.organisations;
   return _.filter(Object.keys(organisations),
-      value => organisations[value][orgFields.joinState] === joinState);
+      value => organisations[value][orgFields.state] === state);
 }
 
 

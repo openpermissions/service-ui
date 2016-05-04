@@ -128,7 +128,7 @@ const MyRequestsList = React.createClass({
 
   getPending(obj) {
     return obj.filter(
-      item => item.get('state') === consts.joinStates.pending &&
+      item => item.get('state') === consts.states.pending &&
               item.get('created_by') === this.props.user.get('id')
     );
   },
@@ -138,7 +138,7 @@ const MyRequestsList = React.createClass({
 
     // Get pending requests for joining organisations
     const pendingJoinOrgIds = util.getUserOrgsByState(
-      this.props.user.toJS(), consts.joinStates.pending
+      this.props.user.toJS(), consts.states.pending
     );
     reqs['pendingJoinOrgs'] = this.getOrganisationsForIds(pendingJoinOrgIds);
 

@@ -44,7 +44,7 @@ describe('util', function () {
         'organisations': {
           'global': {
             'role': 'administrator',
-            'join_state': 'approved'
+            'state': 'approved'
           }
         }
       };
@@ -58,7 +58,7 @@ describe('util', function () {
         'organisations': {
           'global': {
             'role': 'administrator',
-            'join_state': 'approved'
+            'state': 'approved'
           }
         }
       };
@@ -72,7 +72,7 @@ describe('util', function () {
         'organisations': {
           'global': {
             'role': 'user',
-            'join_state': 'approved'
+            'state': 'approved'
           }
         }
       };
@@ -86,11 +86,11 @@ describe('util', function () {
         'organisations': {
           'global': {
             'role': 'user',
-            'join_state': 'approved'
+            'state': 'approved'
           },
           'org1': {
             'role': 'administrator',
-            'join_state': 'approved'
+            'state': 'approved'
           }
         }
       };
@@ -103,11 +103,11 @@ describe('util', function () {
         'organisations': {
           'global': {
             'role': 'user',
-            'join_state': 'approved'
+            'state': 'approved'
           },
           'org1': {
             'role': 'user',
-            'join_state': 'approved'
+            'state': 'approved'
           }
         }
       };
@@ -120,11 +120,11 @@ describe('util', function () {
         'organisations': {
           'global': {
             'role': 'user',
-            'join_state': 'approved'
+            'state': 'approved'
           },
           'org2': {
             'role': 'administrator',
-            'join_state': 'approved'
+            'state': 'approved'
           }
         }
       };
@@ -141,11 +141,11 @@ describe('util', function () {
         'organisations': {
           'global': {
             'role': 'administrator',
-            'join_state': 'approved'
+            'state': 'approved'
           },
           org1: {
             'role': 'user',
-            'join_state': 'approved'
+            'state': 'approved'
           }
         }
       };
@@ -158,11 +158,11 @@ describe('util', function () {
         'organisations': {
           'global': {
             'role': 'user',
-            'join_state': 'approved'
+            'state': 'approved'
           },
           org1: {
             'role': 'administrator',
-            'join_state': 'approved'
+            'state': 'approved'
           }
         }
       };
@@ -175,11 +175,11 @@ describe('util', function () {
         'organisations': {
           'global': {
             'role': 'user',
-            'join_state': 'approved'
+            'state': 'approved'
           },
           org1: {
             'role': 'user',
-            'join_state': 'approved'
+            'state': 'approved'
           }
         }
       };
@@ -192,11 +192,11 @@ describe('util', function () {
         'organisations': {
           'global': {
             'role': 'user',
-            'join_state': 'approved'
+            'state': 'approved'
           },
           org1: {
             'role': 'administrator',
-            'join_state': 'pending'
+            'state': 'pending'
           }
         }
       };
@@ -209,11 +209,11 @@ describe('util', function () {
         'organisations': {
           'global': {
             'role': 'user',
-            'join_state': 'approved'
+            'state': 'approved'
           },
           org1: {
             'role': 'administrator',
-            'join_state': 'approved'
+            'state': 'approved'
           }
         }
       };
@@ -228,11 +228,11 @@ describe('util', function () {
         'organisations': {
           'global': {
             'role': 'administrator',
-            'join_state': 'approved'
+            'state': 'approved'
           },
           org1: {
             'role': 'user',
-            'join_state': 'approved'
+            'state': 'approved'
           }
         }
       };
@@ -245,11 +245,11 @@ describe('util', function () {
         'organisations': {
           'global': {
             'role': 'administrator',
-            'join_state': 'approved'
+            'state': 'approved'
           },
           org1: {
             'role': 'user',
-            'join_state': 'approved'
+            'state': 'approved'
           }
         }
       };
@@ -262,11 +262,11 @@ describe('util', function () {
         'organisations': {
           'global': {
             'role': 'user',
-            'join_state': 'approved'
+            'state': 'approved'
           },
           org1: {
             'role': 'user',
-            'join_state': 'approved'
+            'state': 'approved'
           }
         }
       };
@@ -279,11 +279,11 @@ describe('util', function () {
         'organisations': {
           'global': {
             'role': 'user',
-            'join_state': 'approved'
+            'state': 'approved'
           },
           org1: {
             'role': 'administrator',
-            'join_state': 'pending'
+            'state': 'pending'
           }
         }
       };
@@ -296,15 +296,15 @@ describe('util', function () {
         'organisations': {
           'global': {
             'role': 'user',
-            'join_state': 'approved'
+            'state': 'approved'
           },
           org1: {
             'role': 'administrator',
-            'join_state': 'approved'
+            'state': 'approved'
           },
           org2: {
             'role': 'user',
-            'join_state': 'approved'
+            'state': 'approved'
           }
         }
       };
@@ -317,15 +317,15 @@ describe('util', function () {
         'organisations': {
           'global': {
             'role': 'user',
-            'join_state': 'approved'
+            'state': 'approved'
           },
           org1: {
             'role': 'administrator',
-            'join_state': 'approved'
+            'state': 'approved'
           },
           org2: {
             'role': 'user',
-            'join_state': 'approved'
+            'state': 'approved'
           }
         }
       };
@@ -339,11 +339,11 @@ describe('util', function () {
         'organisations': {
           'global': {
             'role': 'user',
-            'join_state': 'approved'
+            'state': 'approved'
           },
           org1: {
             'role': 'administrator',
-            'join_state': 'approved'
+            'state': 'approved'
           }
         }
       };
@@ -359,11 +359,11 @@ describe('util', function () {
         'organisations': {
           'global': {
             'role': 'user',
-            'join_state': 'approved'
+            'state': 'approved'
           },
           org1: {
             'role': 'administrator',
-            'join_state': 'approved'
+            'state': 'approved'
           }
         }
       };
@@ -377,15 +377,15 @@ describe('util', function () {
         'organisations': {
           'global': {
             'role': 'user',
-            'join_state': 'approved'
+            'state': 'approved'
           },
           org1: {
             'role': 'administrator',
-            'join_state': 'approved'
+            'state': 'approved'
           },
           org2: {
             'role': 'user',
-            'join_state': 'approved'
+            'state': 'approved'
           }
         }
       };
@@ -399,11 +399,11 @@ describe('util', function () {
         'organisations': {
           'global': {
             'role': 'administrator',
-            'join_state': 'approved'
+            'state': 'approved'
           },
           org1: {
             'role': 'administrator',
-            'join_state': 'approved'
+            'state': 'approved'
           }
         }
       };
@@ -413,23 +413,23 @@ describe('util', function () {
     });
   });
 
-  describe('getOrganisationIdsByJoinState', function() {
-    it('should return an array of one organisation id if user has given join state for one organisation', function() {
+  describe('getOrganisationIdsByState', function() {
+    it('should return an array of one organisation id if user has given state for one organisation', function() {
       var user = {
         id: 'user_id',
         'organisations': {
           'global': {
             'role': 'administrator',
-            'join_state': 'approved'
+            'state': 'approved'
           },
           org1: {
             'role': 'administrator',
-            'join_state': 'pending'
+            'state': 'pending'
           }
         }
       };
-      var joinState = 'approved';
-      var result = util.getUserOrgsByState(user, joinState);
+      var state = 'approved';
+      var result = util.getUserOrgsByState(user, state);
       result.should.eql(['global']);
     });
     it('should return an array of multiple organisation ids if user has given join state for multiple organisations', function() {
@@ -438,38 +438,38 @@ describe('util', function () {
         'organisations': {
           'global': {
             'role': 'user',
-            'join_state': 'approved'
+            'state': 'approved'
           },
           org1: {
             'role': 'administrator',
-            'join_state': 'pending'
+            'state': 'pending'
           },
           org2: {
             'role': 'user',
-            'join_state': 'approved'
+            'state': 'approved'
           }
         }
       };
-      var joinState = 'approved';
-      var result = util.getUserOrgsByState(user, joinState);
+      var state = 'approved';
+      var result = util.getUserOrgsByState(user, state);
       result.should.eql(['global', 'org2']);
     });
-    it('should return an empty array if user does not have given join state', function() {
+    it('should return an empty array if user does not have given state for organisation', function() {
       var user = {
         id: 'user_id',
         'organisations': {
           'global': {
             'role': 'administrator',
-            'join_state': 'approved'
+            'state': 'approved'
           },
           org1: {
             'role': 'administrator',
-            'join_state': 'approved'
+            'state': 'approved'
           }
         }
       };
-      var joinState = 'pending';
-      var result = util.getUserOrgsByState(user, joinState);
+      var state = 'pending';
+      var result = util.getUserOrgsByState(user, state);
       result.should.eql([]);
     });
   });

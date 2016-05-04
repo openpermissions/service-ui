@@ -49,11 +49,11 @@ const Services = React.createClass({
   },
 
   _getActions: function(isOrgAdmin, userId, service) {
-    if (isOrgAdmin || (userId == service.created_by && service.state === consts.joinStates.approved)) {
+    if (isOrgAdmin || (userId == service.created_by && service.state === consts.states.approved)) {
       return (
         <div>
           <a href='#' onClick={this._edit(service.id, false)}>Edit</a>
-          <a href='#' onClick={this._delete(service.id)}>Delete</a>
+          <a href='#' onClick={this._delete(service.id)}>Deactivate</a>
         </div>)
     } else {
       return (

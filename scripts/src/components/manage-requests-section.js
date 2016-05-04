@@ -160,7 +160,7 @@ const ManageRequestsSection = React.createClass({
     actions.updateJoinOrganisation.push({
       'organisationId': request.entity.get('id'),
       'userId': request.user.get('id'),
-      'joinState': consts.joinStates.rejected
+      'state': consts.states.rejected
     });
   },
 
@@ -168,28 +168,28 @@ const ManageRequestsSection = React.createClass({
     actions.updateJoinOrganisation.push({
       'organisationId': request.entity.get('id'),
       'userId': request.user.get('id'),
-      'joinState': consts.joinStates.approved
+      'state': consts.states.approved
     });
   },
 
   _approveCreateOrgRequest: function(request) {
     actions.updateOrganisation.push({
       'organisationId': request.entity.get('id'),
-      'state': consts.joinStates.approved
+      'state': consts.states.approved
     });
   },
 
   _rejectCreateOrgRequest: function(request) {
     actions.updateOrganisation.push({
       'organisationId': request.entity.get('id'),
-      'state': consts.joinStates.rejected
+      'state': consts.states.rejected
     });
   },
 
   _approveCreateSrvRequest: function(request) {
     actions.updateService.push({
       'name': request.entity.get('name'),
-      'state': consts.joinStates.approved,
+      'state': consts.states.approved,
       'location': request.entity.get('location'),
       'serviceType': request.entity.get('service_type'),
       'serviceId': request.entity.get('id')
@@ -199,7 +199,7 @@ const ManageRequestsSection = React.createClass({
   _rejectCreateSrvRequest: function(request) {
     actions.updateService.push({
       'name': request.entity.get('name'),
-      'state': consts.joinStates.rejected,
+      'state': consts.states.rejected,
       'location': request.entity.get('location'),
       'serviceType': request.entity.get('service_type'),
       'serviceId': request.entity.get('id')
@@ -209,7 +209,7 @@ const ManageRequestsSection = React.createClass({
   _approveCreateRepRequest: function(request) {
     actions.updateRepository.push({
       'name': request.entity.get('name'),
-      'state': consts.joinStates.approved,
+      'state': consts.states.approved,
       'repositoryId': request.entity.get('id')
     });
   },
@@ -217,7 +217,7 @@ const ManageRequestsSection = React.createClass({
   _rejectCreateRepRequest: function(request) {
     actions.updateRepository.push({
       'name': request.entity.get('name'),
-      'state': consts.joinStates.rejected,
+      'state': consts.states.rejected,
       'repositoryId': request.entity.get('id')
     });
   },
@@ -230,7 +230,7 @@ const ManageRequestsSection = React.createClass({
 
     if (orgIds.indexOf(consts.globalRole) !== -1) {
       return this.props.organisations.filter(
-        org => org.get('state') === consts.joinStates.approved
+        org => org.get('state') === consts.states.approved
       );
     }
     return this.props.organisations.filter(
@@ -255,7 +255,7 @@ const ManageRequestsSection = React.createClass({
           return Object.keys(userOrgs)
             .map( orgId => {
               const organisation = self._getOrgById(orgId);
-              if (userOrgs[orgId].join_state === consts.joinStates.pending && adminOrgIds.indexOf(orgId)>-1) {
+              if (userOrgs[orgId].state === consts.states.pending && adminOrgIds.indexOf(orgId)>-1) {
                 return {'user': user, 'entity': organisation};
               }
             })
@@ -267,7 +267,7 @@ const ManageRequestsSection = React.createClass({
       requests = users
         .map( user => {
           if (user.get('organisations').get(filterOrg) !== undefined &&
-              user.get('organisations').get(filterOrg).get(consts.organisationFields.joinState) === consts.joinStates.pending) {
+              user.get('organisations').get(filterOrg).get(consts.organisationFields.joinState) === consts.states.pending) {
             return {'user': user, 'entity': organisation};
           }
         })
@@ -285,7 +285,7 @@ const ManageRequestsSection = React.createClass({
     const requests = [];
     if (util.isAdmin(this.props.user.toJS())) {
       lst.map(item => {
-        if (item.get('state') === consts.joinStates.pending) {
+        if (item.get('state') === consts.states.pending) {
           const user = this._getUserById(item.get('created_by'));
           (user && requests.push({'user': user, entity: item}));
         }
@@ -302,14 +302,14 @@ const ManageRequestsSection = React.createClass({
     const requests = [];
     if (util.isAdmin(this.props.user.toJS())) {
       lst.map(item => {
-        if (item.get('state') === consts.joinStates.pending) {
+        if (item.get('state') === consts.states.pending) {
           const user = this._getUserById(item.get('created_by'));
           (user && requests.push({'user': user, entity: item}));
         }
       });
     } else {
       lst.map(item => {
-        if (item.get('state') === consts.joinStates.pending &&
+        if (item.get('state') === consts.states.pending &&
             util.isAdmin(this.props.user.toJS(), item.get('service').get('organisation_id'))) {
           const user = this._getUserById(item.get('created_by'));
           (user && requests.push({'user': user, entity: item}));

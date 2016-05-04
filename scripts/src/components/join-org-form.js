@@ -39,7 +39,7 @@ const JoinOrganisationForm = React.createClass({
   _getOrgOptions: function() {
     const userOrgs = this.props.user.get('organisations').keySeq();
     const options = this.props.organisations.filter(org =>
-      org.get('state') == consts.joinStates.approved && !userOrgs.contains(org.get('id')));
+      org.get('state') == consts.states.approved && !userOrgs.contains(org.get('id')));
     return options.map(org => {
       /* jshint ignore:start */
       return (

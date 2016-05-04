@@ -41,13 +41,13 @@ var ServiceEditSection = React.createClass({
   },
 
   componentWillMount: function () {
-    if (!this.props.service.has('secrets') && this.props.service.get('state') == consts.joinStates.approved) {
+    if (!this.props.service.has('secrets') && this.props.service.get('state') == consts.states.approved) {
       actions.getSecrets.push({serviceId: this.props.service.get('id')});
     }
   },
 
   componentWillUpdate: function () {
-    if (!this.props.service.has('secrets') && this.props.service.get('state') == consts.joinStates.approved) {
+    if (!this.props.service.has('secrets') && this.props.service.get('state') == consts.states.approved) {
       actions.getSecrets.push({serviceId: this.props.service.get('id')});
     }
   },
@@ -77,12 +77,12 @@ var ServiceEditSection = React.createClass({
            readOnly={this.props.readOnly}
            serviceTypes={this.props.serviceTypes}
            validationErrors={this.props.validationErrors} />
-        {this.props.service.get('state') == consts.joinStates.approved &&
+        {this.props.service.get('state') == consts.states.approved &&
           <SecretsList
             service={this.props.service}
             readOnly={this.props.readOnly}
             validationErrors={this.props.validationErrors} />}
-        {(this.props.service.get('state') == consts.joinStates.approved && !this.props.readOnly) &&
+        {(this.props.service.get('state') == consts.states.approved && !this.props.readOnly) &&
           <PermissionsForm
             entity={this.props.service}
             entityType='service'
