@@ -50,7 +50,7 @@ const Repositories = React.createClass({
     if (!this.props.repositories.size) { return null; }
 
     //Can edit a repository if admin of org repository belongs to, global admin, or if creator of repository
-    const isOrgAdmin = util.isAdmin(this.props.user.toJS(), this.props.orgId);
+    const isOrgAdmin = util.isOrgAdmin(this.props.user.toJS(), this.props.orgId);
     const userId = this.props.user.get('id');
 
     return (

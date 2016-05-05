@@ -137,7 +137,7 @@ const MyRequestsList = React.createClass({
     const reqs = {};
 
     // Get pending requests for joining organisations
-    const pendingJoinOrgIds = util.getUserOrgsByState(
+    const pendingJoinOrgIds = util.getOrganisationIdsByState(
       this.props.user.toJS(), consts.states.pending
     );
     reqs['pendingJoinOrgs'] = this.getOrganisationsForIds(pendingJoinOrgIds);

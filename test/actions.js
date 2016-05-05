@@ -168,7 +168,9 @@ describe('actions', function () {
                      "last_name": "Porter",
                      "email": "harry@example.com",
                      "id": "174018a615105866d01fa495540007da",
-                     "organisations": {"global": {"role": "user", "state": "approved"}}}]);
+                     "role": "user",
+                     "state": "approved",
+                     "organisations": {}}]);
     });
   });
 
@@ -218,7 +220,9 @@ describe('actions', function () {
                      "last_name": "Porter",
                      "email": "harry@example.com",
                      "id": "174018a615105866d01fa495540007da",
-                     "organisations": {"global": {"role": "user", "state": "approved"}}}]);
+                     "role": "user", 
+                     "state": "approved",
+                     "organisations": {}}]);
     });
   });
 
@@ -246,7 +250,9 @@ describe('actions', function () {
                      "last_name": "Porter",
                      "email": "harry@example.com",
                      "id": "174018a615105866d01fa495540007da",
-                     "organisations": {"global": {"role": "user", "state": "approved"}}}]);
+                     "role": "user", 
+                     "state": "approved",
+                     "organisations": {}}]);
     });
   });
 
@@ -309,8 +315,9 @@ describe('actions', function () {
                          "last_name": "User",
                          "email": "test@example.com",
                          "id": "67890",
-                         "organisations": {"global": {"role": "user", "state": "approved"},
-                                           "test": {"role": "user", "state": "approved"}}});
+                         "role": "user", 
+                         "state": "approved",
+                         "organisations": {"test": {"role": "user", "state": "approved"}}});
     });
 
     it('should make a getUsers api request', function () {
@@ -322,7 +329,9 @@ describe('actions', function () {
                      "last_name": "Porter",
                      "email": "harry@example.com",
                      "id": "174018a615105866d01fa495540007da",
-                     "organisations": {"global": {"role": "user", "state": "approved"}}}]);
+                     "role": "user", 
+                     "state": "approved",
+                     "organisations": {}}]);
     });
   });
 
@@ -358,8 +367,9 @@ describe('actions', function () {
                          "last_name": "User",
                          "email": "test@example.com",
                          "id": "67890",
-                         "organisations": {"global": {"role": "user", "state": "approved"},
-                                           "test": {"role": "user", "state": "approved"}}});
+                         "role": "user", 
+                         "state": "approved",
+                         "organisations": {"test": {"role": "user", "state": "approved"}}});
     });
 
     it('should make a getUsers api request', function () {
@@ -371,7 +381,9 @@ describe('actions', function () {
                      "last_name": "Porter",
                      "email": "harry@example.com",
                      "id": "174018a615105866d01fa495540007da",
-                     "organisations": {"global": {"role": "user", "state": "approved"}}}]);
+                     "role": "user", 
+                     "state": "approved",
+                     "organisations": {}}]);
     });
   });
 
@@ -407,8 +419,9 @@ describe('actions', function () {
                          "last_name": "User",
                          "email": "test@example.com",
                          "id": "67890",
-                         "organisations": {"global": {"role": "user", "state": "approved"},
-                                           "org1": {"role": "user", "state": "approved"}}})
+                         "role": "user", 
+                         "state": "approved",
+                         "organisations": {"org1": {"role": "user", "state": "approved"}}})
     });
 
     it('should make a getUsers api request', function () {
@@ -420,7 +433,9 @@ describe('actions', function () {
                      "last_name": "Porter",
                      "email": "harry@example.com",
                      "id": "174018a615105866d01fa495540007da",
-                     "organisations": {"global": {"role": "user", "state": "approved"}}}]);
+                     "role": "user", 
+                     "state": "approved",
+                     "organisations": {}}]);
     });
   });
 
@@ -660,11 +675,9 @@ describe('actions', function () {
       result.should.eql({
         "id": "user_id",
         "email": "user@example.com",
+        "role": "user",
+        "state": "approved",
         "organisations": {
-          "global": {
-            "role": "user",
-            "state": "approved"
-          },
           "org_id": {
             "role": "user",
             "state": "pending"
@@ -682,7 +695,9 @@ describe('actions', function () {
                      "last_name": "Porter",
                      "email": "harry@example.com",
                      "id": "174018a615105866d01fa495540007da",
-                     "organisations": {"global": {"role": "user", "state": "approved"}}}]);
+                     "role": "user", 
+                     "state": "approved",
+                     "organisations": {}}]);
     });
   });
 
@@ -714,12 +729,9 @@ describe('actions', function () {
       result.should.eql({
         "id": "user_id",
         "email": "user@example.com",
-        "organisations": {
-          "global": {
-            "role": "user",
-            "state": "approved"
-          }
-        }
+        "role": "user",
+        "state": "approved",
+        "organisations": {}
       });
     });
 
@@ -732,7 +744,9 @@ describe('actions', function () {
                      "last_name": "Porter",
                      "email": "harry@example.com",
                      "id": "174018a615105866d01fa495540007da",
-                     "organisations": {"global": {"role": "user", "state": "approved"}}}]);
+                     "role": "user", 
+                     "state": "approved",
+                     "organisations": {}}]);
     });
   });
 

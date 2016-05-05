@@ -53,6 +53,7 @@ const UserForm = React.createClass({
         initialState[org] = this.props.editUser.organisations[org]['role'];
       }
     }
+    initialState[consts.globalRole] = this.props.editUser.role;
     initialState.changes = 0;
     initialState.errors = {};
     return initialState;
@@ -76,14 +77,24 @@ const UserForm = React.createClass({
   _onSubmit: function(event) {
     event.preventDefault();
     const organisations = this.props.editUser.organisations;
-    const updatedRoles = _.omit(this.state, ['changes', 'errors']);
+    if (this.state[consts.globalRole] !== this.props.editUser[consts.role] ) {
+        this.state.changes++;
+        const role = {
+          userId: this.props.editUser.id,
+          role: this.state[consts.globalRole],
+          organisationId: null
+        };
+        actions.updateUserRole.push(role);
+      }
+
+    const updatedRoles = _.omit(this.state, [consts.globalRole, 'changes', 'errors']);
     for (const org in updatedRoles) {
-      if (updatedRoles[org] !== organisations[org]['role'] ) {
+      if (updatedRoles[org] !== organisations[org][consts.role] ) {
         this.state.changes++;
         const role = {
           userId: this.props.editUser.id,
           role: updatedRoles[org],
-          organisationId: org == consts.globalRole ? null : org
+          organisationId: org
         };
         actions.updateUserRole.push(role);
       }

@@ -16,7 +16,6 @@
 
 const _ = require('lodash');
 const consts = require('./constants');
-const orgFields = consts.organisationFields;
 
 /**
  * Return a function that picks the values from an object in the same order as
@@ -50,21 +49,29 @@ function findDuplicates(items) {
 }
 
 
-function isAdmin(user, orgId) {
+function isAdmin(user) {
   /**
- * Returns whether user has administrator role
- * If org is specified, returns whether user has role for that organisation
+   * Returns whether user is a system administrator
+   */
+  return user[consts.role] == consts.roles.admin && user[consts.state] == consts.states.approved;
+}
+
+function isOrgAdmin(user, orgId) {
+  /**
+ * Returns whether user is administrator for organisation
  * @param user
  * @param orgId
  * @returns {bool}
  */
-  if (hasRole(user, consts.roles.admin, consts.globalRole)) {
+  if (!orgId) {
+    throw new Error('Must provide an organisation id')
+  }
+
+  if (isAdmin(user)) {
     return true;
   }
-  if (orgId != undefined) {
-    return hasRole(user, consts.roles.admin, orgId);
-  }
-  return false;
+
+  return hasRole(user, consts.roles.admin, orgId);
 }
 
 /**
@@ -82,14 +89,20 @@ function hasRole(user, role, org) {
     if (!(org in orgs)) {
       return false;
     }
-    return (orgs[org][orgFields.role] === role &&
-      orgs[org][orgFields.state] === consts.states.approved) ||
-      (orgs[consts.globalRole] && orgs[consts.globalRole][orgFields.role] === role);
+
+    return (orgs[org][consts.role] === role &&
+      orgs[org][consts.state] === consts.states.approved) ||
+      (user[consts.role] === role && user[consts.state] === consts.states.approved);
+  }
+
+  if (user[consts.role] === role && user[consts.state] === consts.states.approved) {
+    return true;
   }
 
   for (var key in orgs) {
-    if (orgs[key][orgFields.role] === role &&
-        orgs[key][orgFields.state] === consts.states.approved) {
+    if (orgs[key][consts.role] === role &&
+        orgs[key][consts.state] === consts.states.approved)
+    {
       return true;
     }
   }
@@ -97,7 +110,7 @@ function hasRole(user, role, org) {
 }
 
 /**
- * Returns array of organisations that a user has specified role for
+ * Returns array of organisation ids that a user has specified role for
  * @param user
  * @param role
  * @returns Array of organisation Ids
@@ -105,8 +118,8 @@ function hasRole(user, role, org) {
 function getOrganisationIdsByRole(user, role) {
   const organisations = user.organisations;
   return _.filter(Object.keys(organisations),
-      value => organisations[value]['role'] === role &&
-      organisations[value][orgFields.state] === consts.states.approved);
+      value => organisations[value][consts.role] === role &&
+      organisations[value][consts.state] === consts.states.approved);
 }
 
 /**
@@ -115,10 +128,10 @@ function getOrganisationIdsByRole(user, role) {
 * @param state
 * @returns array of organisation Ids
 */
-function getUserOrgsByState(user, state) {
+function getOrganisationIdsByState(user, state) {
   const organisations = user.organisations;
   return _.filter(Object.keys(organisations),
-      value => organisations[value][orgFields.state] === state);
+      value => organisations[value][consts.state] === state);
 }
 
 
@@ -126,8 +139,9 @@ module.exports = {
   valuesFor: valuesFor,
   mapObject: mapObject,
   isAdmin: isAdmin,
+  isOrgAdmin: isOrgAdmin,
   hasRole: hasRole,
   getOrganisationIdsByRole: getOrganisationIdsByRole,
-  getUserOrgsByState: getUserOrgsByState,
+  getOrganisationIdsByState: getOrganisationIdsByState,
   findDuplicates: findDuplicates
 };

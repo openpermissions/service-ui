@@ -90,7 +90,7 @@ const OrganisationServices = React.createClass({
         <h1><span><Rating readonly={true} empty={'fa fa-star-o gold'} full={'fa fa-star gold'} initialRate={this.props.currentOrganisation.get('star_rating')}/></span> {this.props.currentOrganisation.get('name')}</h1>
         <div className='edit form-group'>
           <button onClick={this._switchOrganisation} className={'btn btn-primary'}>{messages.requests.actions.switch}</button>
-          {util.isAdmin(this.props.user.toJS(), this.props.currentOrganisation.get('id')) &&
+          {util.isOrgAdmin(this.props.user.toJS(), this.props.currentOrganisation.get('id')) &&
           <span>
             <button className={'btn btn-primary'} onClick={this._editOrganisation}>{messages.requests.actions.editOrg}</button>
             <button className={'btn btn-danger'} onClick={this._deleteOrganisation}>{messages.requests.actions.deleteOrg}</button>
