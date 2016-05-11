@@ -64,12 +64,11 @@ var CreateOrg = React.createClass({
   getInitialState: function () {
     const attrs = _.zip(...this._getFormProps())[0];
     const state = _.zipObject(attrs, _.map(attrs, attr => this.props.organisation.get(attr)));
+
     let referenceLinks = this.props.organisation.get('reference_links');
-    if (referenceLinks === undefined) {
-      referenceLinks = {}
-    } else {
-      referenceLinks = referenceLinks.toJS()
-    }
+    if (!referenceLinks) { referenceLinks = {}; }
+    else { referenceLinks = referenceLinks.toJS(); }
+
     state.referenceLinks = referenceLinks;
     state.submitDisabled = false;
     return _.extend({errors: {}}, state);
@@ -106,13 +105,59 @@ var CreateOrg = React.createClass({
     }
   },
 
-
-  _handleReferenceLinksChange(newData, errors) {
-    if (errors.length == 0) {
-      this.setState({referenceLinks: newData, submitDisabled: false});
-    } else {
-      this.setState({referenceLinks: newData, submitDisabled: true});
+  /**
+   * Parses each reference link and checks for url
+   * placeholders that are expected
+   *
+   * @param {object} links
+   */
+  _parseReferenceLinks(links) {
+    const placeholders = ['{source_id}'],
+          errors = {'reference_links': []};
+    for (let idType in links) {
+      if (idType && links[idType]) {
+        placeholders.forEach(ph => {
+          if (links[idType].indexOf(ph) === -1) {
+            const errorMsg = `The URL for asset ID type ${idType} is missing the placeholder ${ph}`;
+            errors.reference_links.push(errorMsg);
+          }
+        });
+      }
     }
+    this.setState({errors: errors});
+  },
+
+  /**
+   * Handle changes to reference links and updates
+   * the state for referenceLinks
+   *
+   * @param {object} newLinks
+   * @param {array} errors
+   */
+  _handleReferenceLinksChange(newLinks, errors) {
+    const newRefLinks = {'links': newLinks};
+    let submitDisabled = false;
+    // Validate the new reference links and make sure they include all
+    // the required URL variables
+    this._parseReferenceLinks(newLinks);
+    if (errors.length > 0) { submitDisabled = true; }
+    this.setState({referenceLinks: newRefLinks, submitDisabled: submitDisabled});
+  },
+
+  /**
+   * Updates the state with the new redirect URL
+   *
+   * @param {object} event
+   */
+  _updateRedirectUrl: function(event) {
+    const newRedirectIdType = event.target.value,
+          currentRefLinks = this.state.referenceLinks;
+
+    if (newRedirectIdType === 'unset') { delete currentRefLinks.redirect_id_type; }
+    else { currentRefLinks.redirect_id_type = newRedirectIdType; }
+    this.setState({
+      'referenceLinks': currentRefLinks
+    });
   },
 
   /**
@@ -123,13 +168,22 @@ var CreateOrg = React.createClass({
   _renderReferenceLinks: function() {
     return (
       <div className={'form-group col col-xs-12 col-sm-6 cb'} >
-        <label className="label--big">Reference Links</label>
+        <label className='label--big'>Reference Links</label>
         <KeyValueTable
-          data={this.state.referenceLinks}
+          data={this.state.referenceLinks.links}
           keyLabel='Asset ID Type'
           onChange={this._handleReferenceLinksChange}
           errors={this.state.errors['reference_links'] || []}
           valueType='url' />
+        <label className='label--big'>Redirect URL</label>
+        <select
+          className='reference-links form-control'
+          onChange={this._updateRedirectUrl}
+          defaultValue={this.state.referenceLinks.redirect_id_type}>
+          <option key='unset' value='unset'> - </option>
+          {_.map(this.state.referenceLinks.links,(k, v) =>
+            <option key={v} value={v}>{k}</option>)}
+        </select>
       </div>
     );
   },
