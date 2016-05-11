@@ -182,7 +182,7 @@ var CreateOrg = React.createClass({
           defaultValue={this.state.referenceLinks.redirect_id_type}>
           <option key='unset' value='unset'> - </option>
           {_.map(this.state.referenceLinks.links,(k, v) =>
-            <option key={v} value={v}>{k}</option>)}
+            <option key={v} value={v}>{v} - {k}</option>)}
         </select>
       </div>
     );
