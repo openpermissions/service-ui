@@ -118,7 +118,7 @@ var CreateOrg = React.createClass({
       if (idType && links[idType]) {
         placeholders.forEach(ph => {
           if (links[idType].indexOf(ph) === -1) {
-            const errorMsg = `The URL for asset ID type ${idType} is missing the placeholder ${ph}`;
+            const errorMsg = `The URL for source ID type ${idType} is missing the placeholder ${ph}`;
             errors.reference_links.push(errorMsg);
           }
         });
