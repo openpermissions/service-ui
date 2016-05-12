@@ -24,7 +24,8 @@ const React = require('react'),
       isAdmin = require('../util').isAdmin,
       FormGroup = require('./form-group'),
       messages = require('../messages'),
-      KeyValueTable = require('./keyvalue-table');
+      KeyValueTable = require('./keyvalue-table'),
+      constants = require('../constants.json');
 
 var CreateOrg = React.createClass({
   displayName: 'Create organisation form',
@@ -151,6 +152,7 @@ var CreateOrg = React.createClass({
     return (
       <div className={'form-group col col-xs-12 col-sm-6 cb'} >
         <label className='label--big'>Reference Links</label>
+        <span className={'help-block'}>{constants.organisationFields.helpBlock.refLinks}</span>
         <KeyValueTable
           data={this.state.referenceLinks.links}
           keyLabel='Asset ID Type'
@@ -158,6 +160,7 @@ var CreateOrg = React.createClass({
           errors={this.state.errors['reference_links'] || []}
           valueType='url' />
         <label className='label--big'>Redirect URL</label>
+        <span className={'help-block'}>{constants.organisationFields.helpBlock.redirect}</span>
         <select
           className='reference-links form-control'
           onChange={this._updateRedirectUrl}
