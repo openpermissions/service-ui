@@ -115,8 +115,11 @@ var CreateOrg = React.createClass({
     }
 
     data['reference_links'] = this._prepareReferenceLinks();
-    if (id) { actions.updateOrganisation.push(_.extend(data, { organisationId: id })); }
-    else { actions.createOrganisation.push(data); }
+    if (id) {
+      actions.updateOrganisation.push(_.extend(data, { organisationId: id }));
+    } else {
+      actions.createOrganisation.push(data);
+    }
   },
 
   /**
