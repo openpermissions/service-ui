@@ -24,7 +24,8 @@ const React = require('react'),
       isAdmin = require('../util').isAdmin,
       FormGroup = require('./form-group'),
       messages = require('../messages'),
-      KeyValueTable = require('./keyvalue-table');
+      KeyValueTable = require('./keyvalue-table'),
+      constants = require('../constants.json');
 
 var CreateOrg = React.createClass({
   displayName: 'Create organisation form',
@@ -106,28 +107,6 @@ var CreateOrg = React.createClass({
   },
 
   /**
-   * Parses each reference link and checks for url
-   * placeholders that are expected
-   *
-   * @param {object} links
-   */
-  _parseReferenceLinks(links) {
-    const placeholders = ['{source_id}'],
-          errors = {'reference_links': []};
-    for (let idType in links) {
-      if (idType && links[idType]) {
-        placeholders.forEach(ph => {
-          if (links[idType].indexOf(ph) === -1) {
-            const errorMsg = `The URL for source ID type ${idType} is missing the placeholder ${ph}`;
-            errors.reference_links.push(errorMsg);
-          }
-        });
-      }
-    }
-    this.setState({errors: errors});
-  },
-
-  /**
    * Handle changes to reference links and updates
    * the state for referenceLinks
    *
@@ -137,9 +116,6 @@ var CreateOrg = React.createClass({
   _handleReferenceLinksChange(newLinks, errors) {
     const newRefLinks = {'links': newLinks};
     let submitDisabled = false;
-    // Validate the new reference links and make sure they include all
-    // the required URL variables
-    this._parseReferenceLinks(newLinks);
     if (errors.length > 0) { submitDisabled = true; }
     this.setState({referenceLinks: newRefLinks, submitDisabled: submitDisabled});
   },
@@ -166,9 +142,17 @@ var CreateOrg = React.createClass({
    * @returns {object}
    */
   _renderReferenceLinks: function() {
+    const refLinks = [];
+    _.map(this.state.referenceLinks.links, function(k, v) {
+      if (k && v) {
+        refLinks.push(<option key={v} value={v}>{v} - {k}</option>);
+      }
+    });
+
     return (
       <div className={'form-group col col-xs-12 col-sm-6 cb'} >
         <label className='label--big'>Reference Links</label>
+        <span className={'help-block'}>{constants.organisationFields.helpBlock.refLinks}</span>
         <KeyValueTable
           data={this.state.referenceLinks.links}
           keyLabel='Asset ID Type'
@@ -176,13 +160,13 @@ var CreateOrg = React.createClass({
           errors={this.state.errors['reference_links'] || []}
           valueType='url' />
         <label className='label--big'>Redirect URL</label>
+        <span className={'help-block'}>{constants.organisationFields.helpBlock.redirect}</span>
         <select
           className='reference-links form-control'
           onChange={this._updateRedirectUrl}
           defaultValue={this.state.referenceLinks.redirect_id_type}>
           <option key='unset' value='unset'> - </option>
-          {_.map(this.state.referenceLinks.links,(k, v) =>
-            <option key={v} value={v}>{v} - {k}</option>)}
+          {refLinks}
         </select>
       </div>
     );

@@ -1,5 +1,5 @@
 {
-  "globalRole" : "global",
+  "globalRole": "global",
   "roles": {
     "user": "user",
     "admin": "administrator"
@@ -15,7 +15,7 @@
     "modal_link_url": "modal_link_url",
     "modal_link_text": "modal_link_text",
     "resolution_redirect": "resolution_redirect",
-    "id" : "id",
+    "id": "id",
     "website": "website",
     "address": "address",
     "twitter": "twitter",
@@ -23,7 +23,11 @@
     "phone": "phone",
     "name": "name",
     "logo": "logo",
-    "role": "role"
+    "role": "role",
+    "helpBlock": {
+      "redirect": "The URL that the resolution service will redirect to after it resolves a hub key for an asset associated with this source ID.",
+      "refLinks": "Link to an external page containing information about an asset. Supports optional URL variable 'source_id', e.g. https://example.com/{source_id}"
+    }
   },
   "userFields": {
     "firstName": "first_name",
