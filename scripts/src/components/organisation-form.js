@@ -86,6 +86,21 @@ var CreateOrg = React.createClass({
   },
 
   /**
+   * Prepare POST request to the reference links endpoint
+   * by ensuring that all the keys are valid
+   *
+   * @param {object} referenceLinks
+   */
+  _prepareReferenceLinks: function () {
+    const referenceLinks = {};
+    const links = _.cloneDeep(_.omit(this.state.referenceLinks.links, [null]));
+    if (!_.isEmpty(links)) {
+      referenceLinks.links = links;
+      referenceLinks.redirect_id_type = this.state.referenceLinks.redirect_id_type;
+    }
+    return referenceLinks;
+  },
+  /**
    * Push a createOrganisation action
    *
    * @param {object} event
@@ -98,12 +113,10 @@ var CreateOrg = React.createClass({
     if ('star_rating' in data) {
       data['star_rating'] = parseInt(data['star_rating'] || 0);
     }
-    data['reference_links'] = this.state.referenceLinks;
-    if (id) {
-      actions.updateOrganisation.push(_.extend(data, { organisationId: id }));
-    } else {
-      actions.createOrganisation.push(data);
-    }
+
+    data['reference_links'] = this._prepareReferenceLinks();
+    if (id) { actions.updateOrganisation.push(_.extend(data, { organisationId: id })); }
+    else { actions.createOrganisation.push(data); }
   },
 
   /**
@@ -114,8 +127,11 @@ var CreateOrg = React.createClass({
    * @param {array} errors
    */
   _handleReferenceLinksChange(newLinks, errors) {
-    const newRefLinks = {'links': newLinks};
+    const newRefLinks = {'links': newLinks},
+          redirectIdType = this.state.referenceLinks.redirect_id_type;
     let submitDisabled = false;
+
+    if (redirectIdType) { newRefLinks.redirect_id_type = redirectIdType; }
     if (errors.length > 0) { submitDisabled = true; }
     this.setState({referenceLinks: newRefLinks, submitDisabled: submitDisabled});
   },
@@ -131,9 +147,7 @@ var CreateOrg = React.createClass({
 
     if (newRedirectIdType === 'unset') { delete currentRefLinks.redirect_id_type; }
     else { currentRefLinks.redirect_id_type = newRedirectIdType; }
-    this.setState({
-      'referenceLinks': currentRefLinks
-    });
+    this.setState({'referenceLinks': currentRefLinks});
   },
 
   /**
@@ -142,11 +156,12 @@ var CreateOrg = React.createClass({
    * @returns {object}
    */
   _renderReferenceLinks: function() {
-    const refLinks = [];
+    const refLinks = [],
+          redirectIdType = this.state.referenceLinks.redirect_id_type,
+          defaultRedirect = (redirectIdType) ? redirectIdType : 'unset';
+
     _.map(this.state.referenceLinks.links, function(k, v) {
-      if (k && v) {
-        refLinks.push(<option key={v} value={v}>{v} - {k}</option>);
-      }
+      if (k && v) { refLinks.push(<option key={v} value={v}>{v} - {k}</option>); }
     });
 
     return (
@@ -164,7 +179,7 @@ var CreateOrg = React.createClass({
         <select
           className='reference-links form-control'
           onChange={this._updateRedirectUrl}
-          defaultValue={this.state.referenceLinks.redirect_id_type}>
+          defaultValue={defaultRedirect}>
           <option key='unset' value='unset'> - </option>
           {refLinks}
         </select>
