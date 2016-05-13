@@ -31,10 +31,8 @@ export default class KeyValueTable extends Component {
   }
 
   updateData(newData) {
-    const duplicates = findDuplicates(_.zip(...newData)[0] || []);
-    const validationErrors = duplicates.map(key => "duplicate key: " + key);
-    this.setState({data: newData, validationErrors: validationErrors});
-    this.props.onChange(_.zipObject(newData), validationErrors);
+    this.setState({data: newData});
+    this.props.onChange(_.zipObject(newData), []);
   }
 
   handleRowChange(index, key, value) {
@@ -46,9 +44,10 @@ export default class KeyValueTable extends Component {
   removeRow(index, e) {
     e.preventDefault();
     const newData = _(this.state.data).cloneDeep();
-    // use null as a placehoder so the index for each row doesn't change
-    // in order to help react render the row with the same key
-    newData[index] = null;
+    // use [null, null] as a placehoder so the index for each row doesn't change
+    // in order to help react render the row with the same key and for
+    // _.zipObject in updateData to work as expected
+    newData[index] = [null, null];
     this.updateData(newData);
   }
 
@@ -67,7 +66,7 @@ export default class KeyValueTable extends Component {
     // in order to help react render the row with the same key
     const data = this.state.data
       .map((row, index) => [row, index])
-      .filter(([row, index]) => row !== null);
+      .filter(([row, index]) => row && row[0] !== null);
     // concat the errors from above with local validation errors
     const errors = (this.props.errors).concat(this.state.validationErrors);
     return (
