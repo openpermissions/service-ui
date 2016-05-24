@@ -153,8 +153,21 @@ const OfferGenerator = React.createClass({
    */
   _getOfferSelection: function() {
     if (this.state.repositoryId && this.props.offers) {
-      let children = this.props.offers.map(offer => React.createElement('option', {key:offer.get('id'), value: offer.get('id'), label: offer.get('title')}));
-      children = children.unshift(React.createElement('option', {key:'', value: '', label: '-- Select an Offer to load --', disabled: true}));
+      let titleOffers = this.props.offers.filter(offer=>offer.get('title') != null);
+      let idOffers = this.props.offers.filter(offer=>offer.get('title') == null);
+
+      let children = Immutable.List([React.createElement('option', {key:'header', value: '', label: '-- Select an Offer to load --', disabled: true})])
+      children = children.push(
+        titleOffers.map(offer => React.createElement('option', {key:offer.get('id'), value: offer.get('id'), label: offer.get('title')})));
+
+      // If offer does not have title, display using id
+      if (idOffers.size > 0) {
+        children = children.push(
+          React.createElement('option', {key:'breakline-title', value: '', label: '-- Offers with No Title --', disabled: true}));
+        children = children.push(
+          idOffers.map(offer => React.createElement('option', {key:offer.get('id'), value: offer.get('id'), label: offer.get('id')})));
+      }
+
       let offerList = React.createElement('select', {valueLink: this.linkState('loadOfferId'), defaultValue: '', className: 'form-control'}, children);
 
       return (
