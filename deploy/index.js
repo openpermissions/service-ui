@@ -38,7 +38,7 @@ function walkFiles(dir, fileList) {
 
 function upload(bucket, key, body, contentType, contentEncoding, callback) {
   process.stdout.write('Uploading ' + key + '..');
-  var params = {Body: body, Key: key};
+  var params = {Body: body, Key: key, ACL: 'public-read'};
   if (contentType) { params.ContentType = contentType; }
   if (contentEncoding) { params.ContentEncoding = contentEncoding; }
 
