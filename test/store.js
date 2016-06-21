@@ -104,7 +104,9 @@ describe('store', () => {
                      "last_name": "Porter",
                      "email": "harry@example.com",
                      "id": "174018a615105866d01fa495540007da",
-                     "organisations": {"global": {"role": "user", "state": "approved"}}}];
+                     "role": "user",
+                     "state": "approved",
+                     "organisations": {}}];
       dispose = store.app.changes().map('.toJS').map('.users')
         .onValue(users => {
           users.should.eql(data);
@@ -135,8 +137,9 @@ describe('store', () => {
         "last_name": "User",
         "email": "test@example.com",
         "id": "67890",
+        "role": "user",
+        "state": "approved",
         "organisations": {
-          "global": {"role": "user", "state": "approved"},
           "org1": {"role": "user", "state": "pending"}
         }
       };
@@ -148,9 +151,11 @@ describe('store', () => {
           "last_name": "User",
           "email": "test@example.com",
           "id": "67890",
+          "role": "user",
+          "state": "approved",
           "organisations": {
-            "global": {"role": "user", "state": "approved"},
-            "org1": {"role": "user", "state": "approved"}}};
+            "org1": {"role": "user", "state": "approved"}
+          }};
 
 
       dispose = store.app.changes().map('.toJS').map('.user').onValue(data => {
@@ -167,8 +172,9 @@ describe('store', () => {
         "last_name": "User",
         "email": "test@example.com",
         "id": "67890",
+        "role": "user",
+        "state": "approved",
         "organisations": {
-          "global": {"role": "user", "state": "approved"},
           "org1": {"role": "user", "state": "pending"}
         }
       };
@@ -180,9 +186,12 @@ describe('store', () => {
           "last_name": "User",
           "email": "test@example.com",
           "id": "12345",
+          "role": "user",
+          "state": "approved",
           "organisations": {
-            "global": {"role": "user", "state": "approved"},
-            "org1": {"role": "user", "state": "approved"}}};
+            "org1": {"role": "user", "state": "approved"}
+          }
+      };
 
 
       dispose = store.app.changes().map('.toJS').map('.user').onValue(data => {

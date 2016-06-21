@@ -73,7 +73,7 @@ const Services = React.createClass({
     if (!this.props.services.size) { return null; }
 
     //Can edit a service if admin of org service belongs to, global admin, or if creator of service
-    const isOrgAdmin = util.isAdmin(this.props.user.toJS(), this.props.orgId);
+    const isOrgAdmin = util.isOrgAdmin(this.props.user.toJS(), this.props.orgId);
     const userId = this.props.user.get('id');
 
     return (

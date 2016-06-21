@@ -51,7 +51,7 @@ var OrgRoles = React.createClass({
   },
 
   renderPolicy: function () {
-    return util.isAdmin(this.props.currentUser.toJS(), this.props.orgId);
+    return util.isOrgAdmin(this.props.currentUser.toJS(), this.props.orgId);
   },
 
   render: function () {

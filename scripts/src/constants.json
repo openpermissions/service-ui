@@ -1,5 +1,7 @@
 {
   "globalRole": "global",
+  "role": "role",
+  "state": "state",
   "roles": {
     "user": "user",
     "admin": "administrator"
@@ -19,11 +21,9 @@
     "website": "website",
     "address": "address",
     "twitter": "twitter",
-    "state": "state",
     "phone": "phone",
     "name": "name",
     "logo": "logo",
-    "role": "role",
     "helpBlock": {
       "redirect": "The URL that the resolution service will redirect to after it resolves a hub key for an asset associated with this source ID.",
       "refLinks": "Link to an external page containing information about an asset. Supports optional URL variable 'source_id', e.g. https://example.com/{source_id}"

@@ -223,16 +223,15 @@ const ManageRequestsSection = React.createClass({
   },
 
   /**
-   * Get the organisations for which the user is admin. If global admin, return all organisations
+   * Get the organisations for which the user is admin. If system admin, return all organisations
    */
   _getAdminnedOrganisations: function() {
-    const orgIds = util.getOrganisationIdsByRole(this.props.user.toJS(), consts.roles.admin);
-
-    if (orgIds.indexOf(consts.globalRole) !== -1) {
+    if (util.isAdmin(this.props.user.toJS())) {
       return this.props.organisations.filter(
         org => org.get('state') === consts.states.approved
       );
     }
+    const orgIds = util.getOrganisationIdsByRole(this.props.user.toJS(), consts.roles.admin);
     return this.props.organisations.filter(
       org => orgIds.indexOf(org.get('id')) !== -1
     );
@@ -267,7 +266,7 @@ const ManageRequestsSection = React.createClass({
       requests = users
         .map( user => {
           if (user.get('organisations').get(filterOrg) !== undefined &&
-              user.get('organisations').get(filterOrg).get(consts.organisationFields.joinState) === consts.states.pending) {
+              user.get('organisations').get(filterOrg).get(consts.state) === consts.states.pending) {
             return {'user': user, 'entity': organisation};
           }
         })
@@ -278,7 +277,7 @@ const ManageRequestsSection = React.createClass({
 
 
   /**
-   * If the user is a global admin, displays all organisation
+   * If the user is a system admin, displays all organisation
    * and service creation requests
    */
   _getPendingCreateRequests: function(lst) {
@@ -295,7 +294,7 @@ const ManageRequestsSection = React.createClass({
   },
 
   /**
-   * If the user is a global admin or is admin of service repository belong to,
+   * If the user is a system admin or is admin of service repository belong to,
    * display repository creation requests
    */
   _getPendingRepoRequests: function(lst) {
@@ -310,7 +309,7 @@ const ManageRequestsSection = React.createClass({
     } else {
       lst.map(item => {
         if (item.get('state') === consts.states.pending &&
-            util.isAdmin(this.props.user.toJS(), item.get('service').get('organisation_id'))) {
+            util.isOrgAdmin(this.props.user.toJS(), item.get('service').get('organisation_id'))) {
           const user = this._getUserById(item.get('created_by'));
           (user && requests.push({'user': user, entity: item}));
         }

@@ -33,7 +33,7 @@ var CreateOrg = React.createClass({
   mixins: [PureRenderMixin, LinkedStateMixin],
 
   _getFormProps: function() {
-    const globalAdminOnly = ['star_rating'];
+    const systemAdminOnly = ['star_rating'];
     const props = ['label', 'required', 'type', 'placeholder', 'tip'];
     let mappings = [
       ['name', ['Name', true, 'text', 'Organisation name', 'Name of the startup, company, or university.']],
@@ -49,7 +49,7 @@ var CreateOrg = React.createClass({
       ['modal_link_text', ['Licence Modal Link Text', false, 'text', 'Link Text', 'Link Text for Licence Modal.']],
       ['modal_link_url', ['Licence Modal Link Url', false, 'text', 'URL', 'Link URL for Licence Modal.']]];
     if (!isAdmin(this.props.user.toJS())) {
-      mappings = _.filter(mappings, ([name, _]) => globalAdminOnly.indexOf(name) == -1);
+      mappings = _.filter(mappings, ([name, _]) => systemAdminOnly.indexOf(name) == -1);
     }
     return _.map(mappings, ([name, vals]) => [name, _.zipObject(props, vals)]);
   },

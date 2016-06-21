@@ -82,21 +82,26 @@ const UsersSection = React.createClass({
     this.setState({filterOrg: orgName});
   },
 
-  getOrganisationsForIds: function(orgIds) {
-    if (orgIds.indexOf(consts.globalRole) != -1) {
+  getOrganisations: function(user) {
+    if (util.isAdmin(user)) {
       return this.props.organisations.filter(function(org) {
         return org.get('state')===consts.states.approved;
       });
     }
+
+    let orgIds = util.getOrganisationIdsByRole(user, consts.roles.admin);
     return this.props.organisations.filter(function(org) {
       return orgIds.indexOf(org.get('id')) != -1;
     });
   },
 
-  getUsersForOrganisations: function(orgIds) {
-    if (orgIds.indexOf(consts.globalRole) != -1) {
+  getUsers: function(user) {
+    if (util.isAdmin(user)) {
       return this.props.users;
     }
+
+    let orgIds = util.getOrganisationIdsByRole(user, consts.roles.admin);
+
     return this.props.users.filter(function(user) {
       const orgs = user.get('organisations').toJS();
       const userOrgs = _.filter(Object.keys(orgs),
@@ -106,9 +111,8 @@ const UsersSection = React.createClass({
   },
 
   render: function () {
-    const organisationIds = util.getOrganisationIdsByRole(this.props.currentUser.toJS(), consts.roles.admin),
-          organisations = this.getOrganisationsForIds(organisationIds),
-          users = this.getUsersForOrganisations(organisationIds);
+    const organisations = this.getOrganisations(this.props.currentUser.toJS()),
+          users = this.getUsers(this.props.currentUser.toJS());
 
     const self = this;
     const editUser = users.find(function(user) {
