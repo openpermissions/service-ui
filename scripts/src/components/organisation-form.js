@@ -35,6 +35,8 @@ var CreateOrg = React.createClass({
   _getFormProps: function() {
     const systemAdminOnly = ['star_rating'];
     const props = ['label', 'required', 'type', 'placeholder', 'tip'];
+    // The first item should be the path to the value in props.organisation as
+    // an array of strings or just a string.
     let mappings = [
       ['name', ['Name', true, 'text', 'Organisation name', 'Name of the startup, company, or university.']],
       ['star_rating', ['Star Rating', false, 'number', 'Organisation star rating (empty is 0)', 'a number from 0 to 5.']],
@@ -44,14 +46,23 @@ var CreateOrg = React.createClass({
       ['phone', ['Phone', false, 'text', 'Organisation phone', 'Phone of the organisation.']],
       ['email', ['Email', false, 'email', 'Organisation email', 'Email of the organisation.']],
       ['website', ['Website', false, 'url', 'Organisation website', 'Website of the organisation']],
+      [['payment', 'url'], ['Payment URL', false, 'url', 'URL', 'URL for payments']],
       ['modal_header_text', ['Licence Modal Header', false, 'text', 'Header Text', 'Header Text for Licence Modal.']],
       ['modal_footer_text', ['Licence Modal Footer', false, 'text', 'Footer Text', 'Footer Text for Licence Modal.']],
       ['modal_link_text', ['Licence Modal Link Text', false, 'text', 'Link Text', 'Link Text for Licence Modal.']],
       ['modal_link_url', ['Licence Modal Link Url', false, 'text', 'URL', 'Link URL for Licence Modal.']]];
+
     if (!isAdmin(this.props.user.toJS())) {
       mappings = _.filter(mappings, ([name, _]) => systemAdminOnly.indexOf(name) == -1);
     }
-    return _.map(mappings, ([name, vals]) => [name, _.zipObject(props, vals)]);
+
+    return mappings.map(([key, vals]) => {
+      return {
+        organisationPath: _.isArray(key) ? key : [key],
+        name: _.isArray(key) ? key[0] : key,
+        field: _.zipObject(props, vals)
+      }
+    });
   },
 
   propTypes: {
@@ -63,8 +74,10 @@ var CreateOrg = React.createClass({
   },
 
   getInitialState: function () {
-    const attrs = _.zip(...this._getFormProps())[0];
-    const state = _.zipObject(attrs, _.map(attrs, attr => this.props.organisation.get(attr)));
+    const state = this._getFormProps().reduce((obj, x) => {
+      obj[x.name] = this.props.organisation.getIn(x.organisationPath)
+      return obj
+    }, {})
 
     let referenceLinks = this.props.organisation.get('reference_links');
     if (!referenceLinks) { referenceLinks = {}; }
@@ -108,8 +121,22 @@ var CreateOrg = React.createClass({
   _onSubmit: function (event) {
     event.preventDefault();
     const id = this.props.organisation.get('id');
-    const attrs = _.zip(...this._getFormProps())[0];
-    const data = _.zipObject(attrs, _.map(attrs, key => (_.get(this.state, key) || '').trim()));
+
+    const data = this._getFormProps().reduce((prev, item) => {
+      const obj = {};
+
+      item.organisationPath.reduce((prev, k, i) => {
+        if (i + 1 === item.organisationPath.length) {
+          prev[k] = (this.state[item.name] || '').trim();
+        } else {
+          prev[k] = {};
+        }
+        return prev[k];
+      }, obj);
+
+      return _.defaultsDeep(obj, prev);
+    }, {});
+
     if ('star_rating' in data) {
       data['star_rating'] = parseInt(data['star_rating'] || 0);
     }
@@ -190,6 +217,21 @@ var CreateOrg = React.createClass({
     );
   },
 
+  createFormGroup: function () {
+    return this._getFormProps().map(item => {
+      const props = {
+        ...item.field,
+        fieldName: item.name,
+        value: this.props.organisation.getIn(item.organisationPath),
+        errors: this.state.errors[item.name] || '',
+        onChange: newVal => this.setState({[item.name]: newVal}),
+        readOnly: this.props.readOnly
+      }
+
+      return React.createElement(FormGroup, props);
+    })
+  },
+
   /**
    * Render a form
    *
@@ -198,16 +240,7 @@ var CreateOrg = React.createClass({
   render: function () {
     const id = this.props.organisation.get('id'),
           submit = id ? 'Update' : 'Create',
-          formGroups = _.map(this._getFormProps(),
-            ([key, vals]) => React.createElement(FormGroup,
-              _.extend({
-                fieldName: key, key: key,
-                value: this.props.organisation.get(key),
-                errors: this.state.errors[key] || '',
-                onChange: newVal => this.setState({[key]: newVal}),
-                readOnly: this.props.readOnly
-              }, vals))
-            );
+          formGroups = this.createFormGroup();
 
     let heading = messages.requests.actions.createOrg;
     if (this.props.readOnly) {
