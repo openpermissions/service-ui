@@ -25,7 +25,8 @@ const React = require('react'),
       FormGroup = require('./form-group'),
       messages = require('../messages'),
       KeyValueTable = require('./keyvalue-table'),
-      constants = require('../constants.json');
+      constants = require('../constants.json'),
+      ErrorMessages = require('./error-messages');
 
 var CreateOrg = React.createClass({
   displayName: 'Create organisation form',
@@ -46,7 +47,6 @@ var CreateOrg = React.createClass({
       ['phone', ['Phone', false, 'text', 'Organisation phone', 'Phone of the organisation.']],
       ['email', ['Email', false, 'email', 'Organisation email', 'Email of the organisation.']],
       ['website', ['Website', false, 'url', 'Organisation website', 'Website of the organisation']],
-      [['payment', 'url'], ['Payment URL', false, 'url', 'URL', 'URL for payments']],
       ['modal_header_text', ['Licence Modal Header', false, 'text', 'Header Text', 'Header Text for Licence Modal.']],
       ['modal_footer_text', ['Licence Modal Footer', false, 'text', 'Footer Text', 'Footer Text for Licence Modal.']],
       ['modal_link_text', ['Licence Modal Link Text', false, 'text', 'Link Text', 'Link Text for Licence Modal.']],
@@ -75,15 +75,17 @@ var CreateOrg = React.createClass({
 
   getInitialState: function () {
     const state = this._getFormProps().reduce((obj, x) => {
-      obj[x.name] = this.props.organisation.getIn(x.organisationPath)
-      return obj
+      obj[x.name] = this.props.organisation.getIn(x.organisationPath);
+      return obj;
     }, {})
 
-    let referenceLinks = this.props.organisation.get('reference_links');
-    if (!referenceLinks) { referenceLinks = {}; }
-    else { referenceLinks = referenceLinks.toJS(); }
+    let value;
 
-    state.referenceLinks = referenceLinks;
+    [['payment', 'payment'], ['reference_links', 'referenceLinks']].forEach(([orgKey, stateKey]) => {
+      value = this.props.organisation.get(orgKey);
+      state[stateKey] = value ? value.toJS() : {};
+    });
+
     state.submitDisabled = false;
     return _.extend({errors: {}}, state);
   },
@@ -141,7 +143,9 @@ var CreateOrg = React.createClass({
       data['star_rating'] = parseInt(data['star_rating'] || 0);
     }
 
+    data['payment'] = this.state.payment || {};
     data['reference_links'] = this._prepareReferenceLinks();
+
     if (id) {
       actions.updateOrganisation.push(_.extend(data, { organisationId: id }));
     } else {
@@ -200,7 +204,7 @@ var CreateOrg = React.createClass({
         <span className={'help-block'}>{constants.organisationFields.helpBlock.refLinks}</span>
         <KeyValueTable
           data={this.state.referenceLinks.links}
-          keyLabel='Asset ID Type'
+          keyLabel='Source ID Type'
           onChange={this._handleReferenceLinksChange}
           errors={this.state.errors['reference_links'] || []}
           valueType='url' />
@@ -232,6 +236,47 @@ var CreateOrg = React.createClass({
     })
   },
 
+  updatePaymentField: function (field) {
+    return e => {
+      const payment = Object.assign({}, this.state.payment, {[field]: e.target.value});
+      this.setState({payment: payment});
+    }
+  },
+
+  renderPaymentFields: function () {
+    return (
+      <div className={'form-group col col-exs-12 col-sm-6 cb'} key='payment-form-group'>
+        <label className='label--big'>Payment</label>
+        <span className='help-block'>{constants.organisationFields.helpBlock.payment}</span>
+        <div className='input-group' style={{display: 'table', width: '100%'}}>
+          <div style={{display: 'table-cell', width: '50%'}}>
+            <label className='label--medium' htmlFor='payment-url'>URL</label>
+            <input
+              name='payment-url'
+              type='url'
+              className='form-control'
+              placeholder='URL'
+              value={_.get(this.state, ['payment', 'url'], '')}
+              onChange={this.updatePaymentField('url')}
+            />
+          </div>
+          <div style={{display: 'table-cell', width: '50%'}}>
+            <label className='label--medium' htmlFor='payment-source-id-type'>Source ID Type</label>
+            <input
+              name='payment-source-id-type'
+              type='text'
+              className='form-control'
+              placeholder='Source ID type'
+              value={_.get(this.state, ['payment', 'source_id_type'], '')}
+              onChange={this.updatePaymentField('source_id_type')}
+            />
+          </div>
+          <ErrorMessages errors={this.state.errors.payment || ''} />
+        </div>
+      </div>
+    )
+  },
+
   /**
    * Render a form
    *
@@ -255,6 +300,7 @@ var CreateOrg = React.createClass({
         <h1>{heading}</h1>
         <form className={'organisation form row'} onSubmit={this._onSubmit}>
           {formGroups}
+          {this.renderPaymentFields()}
           {this._renderReferenceLinks()}
           {!this.props.readOnly &&
             <div className={'form-group col col-xs-12 cb'}>
