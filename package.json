@@ -18,6 +18,7 @@
         "react-addons-pure-render-mixin": "~0.14.0",
         "react-dom": "~0.14.0",
         "react-aria-menubutton": "4.1.1",
+        "react-color": "^2.2.0",
         "react-simpletabs": "^0.7.0",
         "string-format": "0.5.0",
         "uuid": "^1.4.2",

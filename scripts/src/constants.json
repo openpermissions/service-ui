@@ -27,7 +27,8 @@
     "helpBlock": {
       "redirect": "The URL that the resolution service will redirect to after it resolves a hub key for an asset associated with this source ID.",
       "refLinks": "Link to an external page containing information about an asset. Supports optional URL variable 'source_id', e.g. https://example.com/{source_id}",
-      "payment": "Link to pay for an asset. Supports optional URL variable 'source_id', e.g. https://example.com/{source_id}. If a 'source_id' is used please specify the 'source_id_type' "
+      "payment": "Link to pay for an asset. Supports optional URL variable 'source_id', e.g. https://example.com/{source_id}. If a 'source_id' is used please specify the 'source_id_type'.",
+      "colors": "The colors that are used when the organisation is displayed. Primary color is the main colour used for backgrounds and buttons. Secondary color is used for headings."
     }
   },
   "userFields": {
