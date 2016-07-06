@@ -20,13 +20,74 @@ const React = require('react'),
       _ = require('lodash'),
       PropTypes = require('../prop-types'),
       actions = require('../actions'),
-      mapObject = require('../util').mapObject,
       isAdmin = require('../util').isAdmin,
       FormGroup = require('./form-group'),
       messages = require('../messages'),
       KeyValueTable = require('./keyvalue-table'),
       constants = require('../constants.json'),
-      ErrorMessages = require('./error-messages');
+      ErrorMessages = require('./error-messages'),
+      SketchPicker = require('react-color').SketchPicker;
+
+var ColorPicker = React.createClass({
+  propTypes: {
+    field: React.PropTypes.string,
+    value: React.PropTypes.string,
+    onChange: React.PropTypes.func
+  },
+
+  getInitialState: function () {
+    return {
+      color: this.props.value,
+      displayColorPicker: false
+    }
+  },
+
+  handleClick: function () {
+    this.setState({displayColorPicker: !this.state.displayColorPicker})
+  },
+
+  handleClose: function () {
+    this.setState({displayColorPicker: false})
+  },
+
+  handleChange: function(color) {
+    this.setState({ color: color.hex });
+    this.props.onChange(this.props.field, color.hex)
+  },
+
+  render: function () {
+    const popover = {
+      position: 'absolute',
+      zIndex: '100'
+    };
+    const cover = {
+      position: 'fixed',
+      top: '0',
+      right: '0',
+      bottom: '0',
+      left: '0',
+    };
+
+    return (
+      <div>
+        <input
+          style={{color: _.get(this.state, 'color'), background: _.get(this.state, 'color')}}
+          name='color'
+          type='text'
+          className='color-picker'
+          placeholder='Pick Color'
+          value={_.get(this.state, 'color')}
+          readOnly='true'
+          onClick={ this.handleClick } />
+        { this.state.displayColorPicker ? <div style={popover}>
+          <div style={cover} onClick={this.handleClose}/>
+          <SketchPicker color={this.state.color} onChange={this.handleChange} />
+        </div> : null }
+      </div>
+    )
+  }
+});
+
 
 var CreateOrg = React.createClass({
   displayName: 'Create organisation form',
@@ -46,11 +107,8 @@ var CreateOrg = React.createClass({
       ['address', ['Address', false, 'text', 'Organisation address', 'Address of the organisation.']],
       ['phone', ['Phone', false, 'text', 'Organisation phone', 'Phone of the organisation.']],
       ['email', ['Email', false, 'email', 'Organisation email', 'Email of the organisation.']],
-      ['website', ['Website', false, 'url', 'Organisation website', 'Website of the organisation']],
-      ['modal_header_text', ['Licence Modal Header', false, 'text', 'Header Text', 'Header Text for Licence Modal.']],
-      ['modal_footer_text', ['Licence Modal Footer', false, 'text', 'Footer Text', 'Footer Text for Licence Modal.']],
-      ['modal_link_text', ['Licence Modal Link Text', false, 'text', 'Link Text', 'Link Text for Licence Modal.']],
-      ['modal_link_url', ['Licence Modal Link Url', false, 'text', 'URL', 'Link URL for Licence Modal.']]];
+      ['website', ['Website', false, 'url', 'Organisation website', 'Website of the organisation']]
+    ];
 
     if (!isAdmin(this.props.user.toJS())) {
       mappings = _.filter(mappings, ([name, _]) => systemAdminOnly.indexOf(name) == -1);
@@ -86,6 +144,8 @@ var CreateOrg = React.createClass({
       state[stateKey] = value ? value.toJS() : {};
     });
 
+    state['primary_color'] = this.props.organisation.get('primary_color');
+    state['secondary_color'] = this.props.organisation.get('secondary_color');
     state.submitDisabled = false;
     return _.extend({errors: {}}, state);
   },
@@ -143,6 +203,12 @@ var CreateOrg = React.createClass({
       data['star_rating'] = parseInt(data['star_rating'] || 0);
     }
 
+    if (this.state.primary_color) {
+      data['primary_color'] = this.state.primary_color;
+    }
+    if (this.state.secondary_color) {
+      data['secondary_color'] = this.state.secondary_color;
+    }
     data['payment'] = this.state.payment || {};
     data['reference_links'] = this._prepareReferenceLinks();
 
@@ -225,6 +291,7 @@ var CreateOrg = React.createClass({
     return this._getFormProps().map(item => {
       const props = {
         ...item.field,
+        key: item.name,
         fieldName: item.name,
         value: this.props.organisation.getIn(item.organisationPath),
         errors: this.state.errors[item.name] || '',
@@ -277,6 +344,40 @@ var CreateOrg = React.createClass({
     )
   },
 
+  updateColorField: function (field, color) {
+    let state = {};
+    state[field] = color;
+    this.setState(state);
+  },
+
+  renderColorPicker: function() {
+    return (
+      <div className={'form-group col col-exs-12 col-sm-6 cb'} key='color-form-group'>
+        <label className='label--big'>Colors</label>
+        <span className='help-block'>{constants.organisationFields.helpBlock.colors}</span>
+        <div className='input-group' style={{display: 'table', width: '100%'}}>
+          <div style={{display: 'table-cell', width: '50%'}}>
+            <label className='label--medium' htmlFor='primary_color'>Primary Color</label>
+            <ColorPicker
+              field="primary_color"
+              value={this.state.primary_color}
+              onChange={this.updateColorField}
+            />
+          </div>
+          <div style={{display: 'table-cell', width: '50%'}}>
+            <label className='label--medium' htmlFor='secondary_color'>Secondary Color</label>
+            <ColorPicker
+              field="secondary_color"
+              value={this.state.secondary_color}
+              onChange={this.updateColorField}
+            />
+          </div>
+          <ErrorMessages errors={this.state.errors || ''} />
+        </div>
+      </div>
+    )
+  },
+
   /**
    * Render a form
    *
@@ -300,6 +401,7 @@ var CreateOrg = React.createClass({
         <h1>{heading}</h1>
         <form className={'organisation form row'} onSubmit={this._onSubmit}>
           {formGroups}
+          {this.renderColorPicker()}
           {this.renderPaymentFields()}
           {this._renderReferenceLinks()}
           {!this.props.readOnly &&
