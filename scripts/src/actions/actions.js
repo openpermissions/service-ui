@@ -16,8 +16,7 @@
 
 const Bacon = require('baconjs'),
       _ = require('lodash'),
-      valuesFor = require('../util').valuesFor,
-      OfferTemplate = require('./../offer-generator/template');
+      valuesFor = require('../util').valuesFor;
 
 /**
  * Constructor for an object with instances of Bacon.Bus and Bacon.EventStream
@@ -73,13 +72,10 @@ const Bacon = require('baconjs'),
  *
  ** OFFER GENERATOR **
  * @property {Bacon.Bus} getRepoToken -> repoToken
- * @property {Bacon.Bus} newOffer -> offer
  * @property {Bacon.Bus} loadOffer -> offer
+ * @property {Bacon.Bus} newOffer -> offer
  * @property {Bacon.Bus} saveOffer -> offerJSONLD
- * @property {Bacon.Bus} updateAttribute -> offer
- * @property {Bacon.Bus} addOdrlEntity -> offer
- * @property {Bacon.Bus} removeOdrlEntity -> offer
- * @property {Bacon.Bus} updateConstraint -> offer
+ * @property {Bacon.Bus} getOffers -> offers
  */
 function Actions(accountsClient, repositoryClient, authenticationClient) {
   // wrap accounts API methods with Bacon.fromPromise
@@ -144,11 +140,7 @@ function Actions(accountsClient, repositoryClient, authenticationClient) {
     'getOffers',
     'newOffer',
     'loadOffer',
-    'saveOffer',
-    'updateAttribute',
-    'addOdrlEntity',
-    'removeOdrlEntity',
-    'updateConstraint'
+    'saveOffer'
   ], (a) => this[a] = new Bacon.Bus(), this);
 
   // Bacon.EventStreams that transform data from the buses
@@ -379,44 +371,12 @@ function Actions(accountsClient, repositoryClient, authenticationClient) {
        .map('.body.access_token')
        .onValue(token => repositoryClient.token = token);
 
-  const newOffer = this.newOffer
-                       .map(args => {this.template = new OfferTemplate()})
-                       .map(() => this.template.toJS());
 
-  const loadOffer = this.loadOffer
+  this.initialOffer = this.loadOffer
                         .flatMapLatest(args => repositoryRequest.getOffer(args.repositoryId, args.offerId))
-                        .map('.body.data')
-                        .flatMapLatest(args => {
-                          this.template = new OfferTemplate();
-                          return Bacon.fromPromise(this.template.loadOffer(args))
-                        })
-                        .map(() => this.template.toJS());
-
-  const updatedOffer = this.updateAttribute
-                           .map(valuesFor(['type', 'key', 'value']))
-                           .map(args => this.template.updateAttribute(...args))
-                           .map(args => this.template.toJS());
-
-  const addedRule = this.addOdrlEntity
-                        .map(valuesFor(['parent', 'type', 'key', 'id']))
-                        .map(args => this.template.addEntity(...args))
-                        .map(() => this.template.toJS());
-
-  const removedRule = this.removeOdrlEntity
-                          .map(valuesFor(['parent', 'key', 'id']))
-                          .map(args => this.template.removeEntity(...args))
-                          .map(() => this.template.toJS());
-
-  const updatedConstraint = this.updateConstraint
-                                .map(valuesFor(['id', 'key', 'type', 'value']))
-                                .map(args => this.template.updateConstraint(...args))
-                                .map(() => this.template.toJS());
-
-
-  this.offerJSON = Bacon.mergeAll(newOffer, loadOffer, updatedOffer, addedRule, removedRule, updatedConstraint);
-
+                        .map('.body.data');
+  
   this.savedOffer = this.saveOffer
-                         .map( args => { args.offer = this.template.constructOffer(); return args})
                          .flatMapLatest(args => {
                              return repositoryRequest.saveOffer(args.repositoryId, args.offer)
                                .map('.body.data')

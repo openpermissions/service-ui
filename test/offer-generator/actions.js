@@ -27,31 +27,11 @@ var should = require('should'),
 var actions = new Actions(accApi.api, repoApi.api, authApi.api);
 
 describe('actions', function () {
-  describe('newOffer', function () {
-    var template, dispose;
-    //
-    before(function () {
-      dispose = actions.offerJSON.onValue(v => template = v);
-      //MUT
-      actions.newOffer.push();
-    });
-
-    after(function () {
-      dispose();
-      repoApi.reset();
-    });
-
-    it('should pass the new template to the offerJSON event stream', function () {
-      template.should.eql(actions.template);
-    });
-  });
-
-
   describe('loadOffer', function () {
-    var template, dispose;
+    var offer, dispose;
     //
     before(function () {
-      dispose = actions.offerJSON.onValue(v => template = v);
+      dispose = actions.initialOffer.onValue(v => offer = v);
       //MUT
       actions.loadOffer.push({repositoryId: 'repo1', offerId: 'offer1'});
     });
@@ -66,138 +46,22 @@ describe('actions', function () {
       repoApi.api.getOffer.calledWith('repo1', 'offer1').should.be.true;
     });
 
-    it('should pass the offerJSON to the offerJSON event stream', function () {
+    it('should pass the initial Offer to the initialOffer event stream', function () {
       let data = {
-        "@id": "http://openpermissions.org/ns/temporary_id/12",
-        "@type": [
-          "http://www.w3.org/ns/odrl/2/Offer"
+        "@context": {
+          "id": "http://openpermissions.org/ns/id/",
+          "@vocab": "http://www.w3.org/ns/odrl/2/"
+        },
+        "@graph": [
+          {
+            "@id": "id:12",
+            "@type": [
+              "Offer"
+            ]
+          }
         ]
       };
-      template.offer.data.should.eql(data);
-    });
-  });
-
-  describe('updateAttribute', function () {
-    var template, dispose;
-    //
-    before(function () {
-      actions.template = sinon.stub();
-      actions.template.updateAttribute = sinon.stub();
-      actions.template.toJS = sinon.stub().returns({'offer': 'offer'});
-
-      dispose = actions.offerJSON.onValue(v => template = v);
-      //MUT
-      actions.updateAttribute.push({type: 'type', key: 'key', value: 'value'});
-    });
-
-    after(function () {
-      dispose();
-      repoApi.reset();
-    });
-
-    it('should call updateAttribute', function () {
-      actions.template.updateAttribute.calledWith('type', 'key', 'value').should.be.true;
-    });
-
-    it('should get the JS of the template', function () {
-      actions.template.toJS.calledOnce.should.be.true;
-    });
-
-    it('should pass the offerJSON to the offerJSON event stream', function () {
-      template.should.eql({'offer': 'offer'});
-    });
-  });
-
-  describe('addOdrlEntity', function () {
-    var template, dispose;
-    //
-    before(function () {
-      actions.template = sinon.stub();
-      actions.template.addEntity = sinon.stub();
-      actions.template.toJS = sinon.stub().returns({'offer': 'offer'});
-
-      dispose = actions.offerJSON.onValue(v => template = v);
-      //MUT
-      actions.addOdrlEntity.push({type: 'type',parent: 'parent', key: 'key', id: 'id' });
-    });
-
-    after(function () {
-      dispose();
-      repoApi.reset();
-    });
-
-    it('should call addOdrlEntity', function () {
-      actions.template.addEntity.calledWith('parent', 'type', 'key').should.be.true;
-    });
-
-    it('should get the JS of the template', function () {
-      actions.template.toJS.calledOnce.should.be.true;
-    });
-
-    it('should pass the offerJSON to the offerJSON event stream', function () {
-      template.should.eql({'offer': 'offer'});
-    });
-  });
-
-  describe('removeOdrlEntity', function () {
-    var template, dispose;
-    //
-    before(function () {
-      actions.template = sinon.stub();
-      actions.template.removeEntity = sinon.stub();
-      actions.template.toJS = sinon.stub().returns({'offer': 'offer'});
-
-      dispose = actions.offerJSON.onValue(v => template = v);
-      //MUT
-      actions.removeOdrlEntity.push({key: 'key', parent: 'parent', id: 'id'});
-    });
-
-    after(function () {
-      dispose();
-      repoApi.reset();
-    });
-
-    it('should call removeOdrlEntity', function () {
-      actions.template.removeEntity.calledWith('parent', 'key', 'id').should.be.true;
-    });
-
-    it('should get the JS of the template', function () {
-      actions.template.toJS.calledOnce.should.be.true;
-    });
-
-    it('should pass the offerJSON to the offerJSON event stream', function () {
-      template.should.eql({'offer': 'offer'});
-    });
-  });
-
-  describe('updateConstraint', function () {
-    var template, dispose;
-    //
-    before(function () {
-      actions.template = sinon.stub();
-      actions.template.updateConstraint = sinon.stub();
-      actions.template.toJS = sinon.stub().returns({'offer': 'offer'});
-
-      dispose = actions.offerJSON.onValue(v => template = v);
-      //MUT
-      actions.updateConstraint.push({id: 'id', 'key': 'key', type: 'type', value: 'value'});
-    });
-
-    after(function () {
-      dispose();
-      repoApi.reset();
-    });
-
-    it('should call updateConstraint', function () {
-      actions.template.updateConstraint.calledWith('id', 'key', 'type', 'value').should.be.true;
-    });
-
-    it('should get the JS of the template', function () {
-      actions.template.toJS.calledOnce.should.be.true;
-    });
-
-    it('should pass the offerJSON to the offerJSON event stream', function () {
-      template.should.eql({'offer': 'offer'});
+      offer.should.eql(data);
     });
   });
 
@@ -205,9 +69,6 @@ describe('actions', function () {
     var savedOffer, dispose;
     //
     before(function () {
-      actions.template = sinon.stub();
-      actions.template.constructOffer = sinon.stub().returns(['graph']);
-
       dispose = actions.savedOffer.onValue(v => savedOffer = v);
       //MUT
       actions.saveOffer.push({repositoryId: 'repo1'});
@@ -216,10 +77,6 @@ describe('actions', function () {
     after(function () {
       dispose();
       repoApi.reset();
-    });
-
-    it('should call constructOffer', function () {
-      actions.template.constructOffer.calledOnce.should.be.true;
     });
 
     it('should trigger a saveOffer api request', function () {

@@ -45,9 +45,10 @@ var streams = _.transform([
     'repository',
     'deletedRepository',
     'repositories',
-    'offerJSON',
-    'savedOffer',
-    'offers'
+    'newOffer',
+    'initialOffer',
+    'offers',
+    'savedOffer'
   ], (result, k) => result[k] = new Bacon.Bus(), {});
 
 var pages = {
@@ -66,37 +67,46 @@ describe('store', () => {
     dispose && dispose();
   });
 
-  describe('offer template', () => {
-    it('should set template on "offerJSON"', done => {
+  describe('offer', () => {
+    it('should set offer on "initialOffer"', done => {
       var data = {
         offer: 'offer',
         permissions: 'permission'
       };
 
-      dispose = store.app.changes().map('.toJS').map('.template')
+      dispose = store.app.changes().map('.toJS').map('.offer')
         .onValue(offer => {
           offer.should.eql(data);
         done();
       });
-      streams.offerJSON.push(data);
+      streams.initialOffer.push(data);
+    });
+
+    it('should set offer to be empty object on "newOffer"', done => {
+      dispose = store.app.changes().map('.toJS').map('.offer')
+        .onValue(offer => {
+          offer.should.eql({});
+        done();
+      });
+      streams.newOffer.push();
     })
   });
 
   describe('saved offer', () => {
-    it('should set template offerId on "savedOffer"', done => {
+    it('should set offer offerId on "savedOffer"', done => {
       var data = {
         repositoryId: 'repo1',
         offerId: '1234'
       };
 
-      dispose = store.app.changes().map('.toJS').map('.template')
+      dispose = store.app.changes().map('.toJS').map('.offer')
         .onValue(offer => {
           offer['offerId'].should.eql('1234');
         done();
       });
       streams.savedOffer.push(data);
     })
-  })
+  });
 
   describe('get offers', () => {
     it('should set offers "offers"', done => {

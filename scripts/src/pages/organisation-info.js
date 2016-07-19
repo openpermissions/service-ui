@@ -35,7 +35,7 @@ const OrganisationInformation = React.createClass({
     organisations: PropTypes.Immutable.List.isRequired,
     currentOrganisation: PropTypes.Immutable.Map,
     validationErrors: PropTypes.object,
-    template: PropTypes.object,
+    offer: PropTypes.object,
     offers: PropTypes.Immutable.List
   },
 
@@ -107,7 +107,7 @@ const OrganisationInformation = React.createClass({
             currentOrganisation={this.props.currentOrganisation}
             validationErrors={this.props.validationErrors}
             offers={this.props.offers}
-            template={this.props.template} />
+            offer={this.props.offer} />
         );
       }
       return (
