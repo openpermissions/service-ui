@@ -66,7 +66,7 @@ var App = React.createClass({
       validationErrors: {},
       errors: null,
       passwordChanged: false,
-      template: data.get('template'),
+      offer: data.get('offer'),
       offers: data.get('offers')
     });
   },
@@ -146,7 +146,7 @@ var App = React.createClass({
               validationErrors={this.state.validationErrors}
               passwordChanged={this.state.passwordChanged}
               queryParams={this.state.page.queryParams}
-              template={this.state.template}
+              offer={this.state.offer}
               offers={this.state.offers}
             />
           }

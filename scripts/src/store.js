@@ -17,8 +17,7 @@
 
 const Immutable = require('immutable'),
       Bacon = require('baconjs'),
-      _ = require('lodash'),
-      OfferTemplate = require('./offer-generator/template');
+      _ = require('lodash');
 
 //Copied from page.js. Should work with history.location polyfill https://github.com/devote/HTML5-History-API
 const location = ('undefined' !== typeof window) && (window.history.location || window.location);
@@ -31,10 +30,7 @@ function getAppData () {
     let data = Immutable.fromJS(JSON.parse(sessionStorage.getItem('appData')));
     if (!data) {return;}
 
-    //TODO: DO WE WANT TO GET AND STORE TEMPLATE?
-    delete data.get('template');
     delete data.get('offer');
-
 
     const servicePath = ['currentOrganisation', 'services'];
     if (data.hasIn(servicePath)) {
@@ -61,8 +57,6 @@ function storeAppData (data) {
     const repositories = data.getIn(['currentOrganisation', 'repositories']);
     const jsData = data.toJS();
 
-    //TODO: DO WE WANT TO GET AND STORE TEMPLATE?
-    delete jsData['template'];
     delete jsData['offer'];
 
     if (services) {
@@ -395,8 +389,8 @@ function removeRepository(prev, repositoryId) {
   return prev.deleteIn(['currentOrganisation', 'repositories', repositoryId]);
 }
 
-function setOffer(prev, template) {
-  return prev.set('template', Immutable.fromJS(template));
+function setOffer(prev, offer={}) {
+  return prev.set('offer', Immutable.fromJS(offer));
 }
 
 function setOffers(prev, offers) {
@@ -404,7 +398,7 @@ function setOffers(prev, offers) {
 }
 
 function offerSaved(prev, offer) {
-  return prev.setIn(['template', 'offerId'], Immutable.fromJS(offer['offerId']))
+  return prev.setIn(['offer', 'offerId'], Immutable.fromJS(offer['offerId']))
 }
 
 /**
@@ -461,6 +455,7 @@ function Store(actions, routes) {
     getAppData() || Immutable.Map({organisations: Immutable.List(),
                                    services: Immutable.List(),
                                    offers: Immutable.List(),
+                                   offer: Immutable.Map(),
                                    repositories: Immutable.List(),
                                    users: Immutable.List(),
                                    roles: Immutable.List(),
@@ -469,6 +464,7 @@ function Store(actions, routes) {
     actions.logout, () => Immutable.Map({organisations: Immutable.List(),
                                          services: Immutable.List(),
                                          offers: Immutable.List(),
+                                         offer: Immutable.Map(),
                                          repositories: Immutable.List(),
                                          users: Immutable.List(),
                                          roles: Immutable.List(),
@@ -494,7 +490,8 @@ function Store(actions, routes) {
     actions.repositories, setRepositories,
     actions.deletedRepository, removeRepository,
     //** OFFER GENERATOR **//
-    actions.offerJSON, setOffer,
+    actions.newOffer, setOffer,
+    actions.initialOffer, setOffer,
     actions.offers, setOffers,
     actions.savedOffer, offerSaved
   ).combine(path, _.partial(changePage, routes));

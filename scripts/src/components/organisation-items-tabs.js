@@ -17,7 +17,7 @@
 const React = require('react'),
       ServicesSection = require('./services-section'),
       RepositoriesSection = require('./repositories-section'),
-      OfferGenerator = require('../offer-generator/pages/offer-generator'),
+      OfferGenerator = require('../pages/offer-generator'),
       PureRenderMixin = require('react-addons-pure-render-mixin'),
       PropTypes = require('../prop-types'),
       Tabs = require('react-simpletabs');
@@ -33,7 +33,7 @@ const OrganisationItemsTabs = React.createClass({
     serviceTypes: PropTypes.Immutable.List,
     organisations: PropTypes.Immutable.List,
     validationErrors: React.PropTypes.object,
-    template: React.PropTypes.object,
+    offer: React.PropTypes.object,
     offers: PropTypes.Immutable.List
   },
 
@@ -64,8 +64,9 @@ const OrganisationItemsTabs = React.createClass({
           <Tabs.Panel title='Offer Generator'>
            <OfferGenerator
              currentOrganisation={this.props.currentOrganisation}
-             template={this.props.template}
-             offers={this.props.offers}/>
+             offer={this.props.offer}
+             offers={this.props.offers}
+             savedOffer={this.props.savedOffer}/>
          </Tabs.Panel>
         </Tabs>
        );

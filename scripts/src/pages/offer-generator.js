@@ -21,10 +21,10 @@ const React = require('react'),
       PureRenderMixin = require('react-addons-pure-render-mixin'),
       LinkedStateMixin = require('react-addons-linked-state-mixin'),
       _ = require('lodash'),
-      actions = require('../../actions/index'),
-      PropTypes = require('../../prop-types'),
-      OfferComponent = require('../components/offer'),
-      ErrorMessages = require('../../components/error-messages');
+      actions = require('../actions/index'),
+      PropTypes = require('../prop-types'),
+      GeneratorComponent = require('offer-generator').OfferGenerator,
+      ErrorMessages = require('../components/error-messages');
 
 
 const OfferGenerator = React.createClass({
@@ -33,14 +33,20 @@ const OfferGenerator = React.createClass({
   mixins: [ PureRenderMixin, LinkedStateMixin ],
 
   propTypes: {
-    template: React.PropTypes.object,
+    offer: React.PropTypes.object,
     offers: PropTypes.Immutable.List,
     currentOrganisation: PropTypes.Immutable.Map.isRequired,
-    validationErrors: PropTypes.object,
+    validationErrors: PropTypes.object
   },
 
   componentWillMount: function() {
     this._getRepositoryToken('read');
+  },
+
+  componentWillUpdate: function (newProps) {
+    if (newProps.offer && newProps.offer.get('offerId')) {
+      this.setState({showGenerator:false})
+    }
   },
 
   getInitialState: function() {
@@ -48,6 +54,7 @@ const OfferGenerator = React.createClass({
     services = services.filter( s => s.get('service_type') == 'external');
 
     return {
+      showGenerator: false,
       services: services,
       repositoryId: '',
       loadOfferId: '',
@@ -72,7 +79,7 @@ const OfferGenerator = React.createClass({
     * @private
   */
   _loadOffer: function() {
-    this.setState({errors: {}});
+    this.setState({errors: {}, showGenerator: true});
     actions.loadOffer.push({
       organisationId: this.props.currentOrganisation.get('id'),
       repositoryId: this.state.repositoryId,
@@ -82,14 +89,13 @@ const OfferGenerator = React.createClass({
   },
 
   /**
-   * Create new offer template
+   * Create new offer
    * @private
    */
   _newOffer: function() {
-    this.setState({errors: {}});
+    this.setState({errors: {}, showGenerator: true, loadOfferId: ''});
     actions.newOffer.push();
     this._getRepositoryToken('read write['+this.state.repositoryId+']');
-    this.setState({loadOfferId: ''})
   },
 
   /**
@@ -97,9 +103,8 @@ const OfferGenerator = React.createClass({
    * @param event
    * @private
    */
-  _saveOffer: function(event) {
-    event.preventDefault();
-    actions.saveOffer.push({repositoryId: this.state.repositoryId});
+  _saveOffer: function(json) {
+    actions.saveOffer.push({repositoryId: this.state.repositoryId, offer: JSON.stringify(json)});
     this.setState({loadOfferId: ''})
   },
 
@@ -137,10 +142,10 @@ const OfferGenerator = React.createClass({
    * @private
    */
   _getSaveConfirmation: function() {
-    if (this.props.template && this.props.template.get('offerId')) {
+    if (this.props.offer && this.props.offer.get('offerId')) {
       return (
         <div className="alert alert-success">
-          {'New offer ' + this.props.template.get('offerId') + ' has been created.'}
+          {'New offer ' + this.props.offer.get('offerId') + ' has been created.'}
         </div>
       );
     }
@@ -198,17 +203,25 @@ const OfferGenerator = React.createClass({
    * @private
    */
   _getOfferGenerator: function() {
-    if (this.props.template && !this.props.template.get('offerId')) {
-      return(
+    if (this.state.showGenerator === true) {
+      let offer = this.props.offer;
+      if (offer) {
+        offer = offer.toJS();
+        delete offer.offerId;
+
+        if (Object.keys(offer).length == 0) {
+          offer = undefined
+        }
+      }
+      
+      return (
         <div>
-          <form className='OfferForm form row' onSubmit={this._saveOffer}>
-            <OfferComponent
-              template={this.props.template}
-            />
-            <div className='form-group col col-xs-12 cb'>
-              <button className='btn btn-primary' type="submit">Save Offer</button>
-            </div>
-          </form>
+          <GeneratorComponent
+            onCreate={(json) => {this._saveOffer(json)}}
+            buttonText='Save Offer'
+            assigner={this.props.currentOrganisation.get('id')}
+            initialOffer={offer}
+          />
         </div>
       );
     }

@@ -21,7 +21,7 @@ const OrganisationInformation = require('./pages/organisation-info'),
       Requests = require('./pages/requests'),
       Unverified = require('./pages/unverified'),
       Verify = require('./pages/verify'),
-      OfferGenerator = require('./offer-generator/pages/offer-generator');
+      OfferGenerator = require('./pages/offer-generator');
 
 
 module.exports = {

@@ -45,9 +45,10 @@ var streams = _.transform([
     'repository',
     'deletedRepository',
     'repositories',
-    'offerJSON',
-    'savedOffer',
-    'offers'
+    'newOffer',
+    'initialOffer',
+    'offers',
+    'savedOffer'
   ], (result, k) => result[k] = new Bacon.Bus(), {});
 
 var pages = {
@@ -82,7 +83,7 @@ describe('store', () => {
     it('should only contain the page, organisations, services, users, roles and serviceTypes on "logout"', done => {
       dispose = store.app.changes().map('.toJS').onValue(data => {
         data.should.eql({page: {component: pages['/login'], path: '/login', queryParams: {}},
-                         organisations: [], services: [], offers: [], repositories: [], users: [], roles:[], serviceTypes: [],
+                         organisations: [], services: [], offers: [], offer:{}, repositories: [], users: [], roles:[], serviceTypes: [],
                          loggedIn: false});
         done();
       });
