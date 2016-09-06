@@ -131,8 +131,8 @@ const OfferGenerator = React.createClass({
       this.props.currentOrganisation.get('repositories') : Immutable.Map();
 
     let children = repositories.map(
-      (value, key) => React.createElement('option', {key:key, value: key, label: value.get('name')})).toList();
-    children = children.unshift(React.createElement('option', {key:'', value: '', label: '-- Select a repository --', disabled: true}));
+      (value, key) => React.createElement('option', {key:key, value: key}, value.get('name'))).toList();
+    children = children.unshift(React.createElement('option', {key:'', value: '', disabled: true}, '-- Select a repository --'));
     return React.createElement('select', {onChange: this._setRepositoryId, required: true, defaultValue: '', className: 'form-control'}, children);
   },
 
@@ -161,16 +161,16 @@ const OfferGenerator = React.createClass({
       let titleOffers = this.props.offers.filter(offer=>offer.get('title') != null);
       let idOffers = this.props.offers.filter(offer=>offer.get('title') == null);
 
-      let children = Immutable.List([React.createElement('option', {key:'header', value: '', label: '-- Select an Offer to load --', disabled: true})])
+      let children = Immutable.List([React.createElement('option', {key:'header', value: '', disabled: true}, '-- Select an Offer to load --')]);
       children = children.push(
-        titleOffers.map(offer => React.createElement('option', {key:offer.get('id'), value: offer.get('id'), label: offer.get('title')})));
+        titleOffers.map(offer => React.createElement('option', {key:offer.get('id'), value: offer.get('id')}, offer.get('title'))));
 
       // If offer does not have title, display using id
       if (idOffers.size > 0) {
         children = children.push(
-          React.createElement('option', {key:'breakline-title', value: '', label: '-- Offers with No Title --', disabled: true}));
+          React.createElement('option', {key:'breakline-title', value: '', disabled: true}, '-- Offers with No Title --'));
         children = children.push(
-          idOffers.map(offer => React.createElement('option', {key:offer.get('id'), value: offer.get('id'), label: offer.get('id')})));
+          idOffers.map(offer => React.createElement('option', {key:offer.get('id'), value: offer.get('id')}, offer.get('id'))));
       }
 
       let offerList = React.createElement('select', {valueLink: this.linkState('loadOfferId'), defaultValue: '', className: 'form-control'}, children);
