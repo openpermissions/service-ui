@@ -166,6 +166,7 @@ The UI is deployed to a S3 bucket, so you need tthe `AWS_ACCESS_KEY_ID` and
 `secretAccessKey` object keys (see [the
 docs](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html#Credentials_from_Environment_Variables)).
 
+When setting up the Static Website Hosting option in Amazon S3, be sure to set the Index Document **AND** the Error Document to be `index.html`
 To deploy run:
 
 ```bash
